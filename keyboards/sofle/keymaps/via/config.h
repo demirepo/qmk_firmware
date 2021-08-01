@@ -34,6 +34,25 @@ for more options.
 #define ONESHOT_TAP_TOGGLE 3  /* Tapping this number of times holds the key until tapped once again. */
 #define ONESHOT_TIMEOUT 1000
 
+// Settings for using the keybaord as a mouse 30
+#define MOUSEKEY_DELAY 0
+// Delay between pressing a movement key and cursor movement
+#define MOUSEKEY_INTERVAL 7
+// Time between cursor movements
+#define MOUSEKEY_MAX_SPEED  3
+// Maximum cursor speed at which acceleration stops 40
+#define MOUSEKEY_TIME_TO_MAX 40
+// Time until maximum cursor speed is reached
+#define MOUSEKEY_WHEEL_MAX_SPEED 0
+// Maximum number of scroll steps per scroll action
+#define MOUSEKEY_WHEEL_TIME_TO_MAX 0
+// Time until maximum scroll speed is reached
+
+//If your encoders clockwise directions are incorrect, you can swap the A & B pad definitions. They can also be flipped with a define:
+#define ENCODER_DIRECTION_FLIP
+//Additionally, the resolution, which defines how many pulses the encoder registers between each detent, can be defined with:
+//#define ENCODER_RESOLUTION { 4, 2 }
+
 /* disable debug print */
 // #define NO_DEBUG
 
