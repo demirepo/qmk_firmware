@@ -26,6 +26,51 @@ enum layer_names {
   _FN4
 };
 
+enum custom_keycodes {
+    M_ARROW = SAFE_RANGE,
+    M_MACRO0,
+    M_MACRO1,
+    M_MACRO2,
+    M_MACRO3,
+    M_MACRO4,
+    M_MACRO5,
+    M_MACRO6,
+    M_MACRO7,
+    M_MACRO8,
+    M_MACRO9,
+    M_MACRO10,
+    M_MACRO11,
+    M_MACRO12,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case M_ARROW:
+        if (record->event.pressed) {
+            // when keycode QMKBEST is pressed
+            SEND_STRING("=>");
+        } else {
+            // when keycode QMKBEST is released
+        }
+        break;
+    // case QMKURL:
+    //     if (record->event.pressed) {
+    //         // when keycode QMKURL is pressed
+    //         SEND_STRING("https://qmk.fm/\n");
+    //     } else {
+    //         // when keycode QMKURL is released
+    //     }
+    //     break;
+
+    // case MY_OTHER_MACRO:
+    //     if (record->event.pressed) {
+    //        SEND_STRING(SS_LCTL("ac")); // selects all and copies
+    //     }
+    //     break;
+    }
+    return true;
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_HOME] = LAYOUT(
     KC_GRV,         KC_EXLM,      KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                                    KC_CIRC, KC_AMPR,     KC_ASTR, KC_RBRC, KC_MINS,          KC_EQL,
@@ -38,12 +83,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,      KC_5,                            KC_CIRC,  KC_AMPR, KC_ASTR, KC_BSLS, KC_MINS, KC_EQL,
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,      KC_T,                            KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
     KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,      KC_G,                            KC_H,     KC_J,    KC_K,    KC_L,    KC_O,    KC_QUOT,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,      KC_B,     KC_MUTE,      KC_MPLY, KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_BSPC,
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,      KC_B,     KC_MUTE,    TG(_GAME), KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_BSPC,
                       KC_F9, KC_BSPC, KC_LALT,   MO(_FN4), KC_SPC,         KC_SPC,  MO(_NAV), KC_RCTL, KC_RALT, KC_RBRC),
 
 	[_NUM] = LAYOUT(
     KC_TRNS, KC_F1,   KC_F2,      KC_F3,   KC_F4,   KC_F5,                          KC_F6,   KC_F7, KC_F8,   KC_F9,  KC_F10,  KC_F11,
-    KC_CAPS, KC_TRNS, C(KC_RSFT), KC_LBRC, KC_RBRC, KC_UNDS,                        KC_PCMM, KC_P7, KC_P8,   KC_P9,  KC_PAST, KC_F12,
+    KC_CAPS, M_ARROW, C(KC_RSFT), KC_LBRC, KC_RBRC, KC_UNDS,                        KC_PCMM, KC_P7, KC_P8,   KC_P9,  KC_PAST, KC_F12,
     KC_TRNS, KC_LCBR, KC_RCBR,    KC_LPRN, KC_RPRN, KC_MINS,                        KC_PDOT, KC_P4, KC_P5,   KC_P6,  KC_PMNS, KC_PPLS,
     KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_PWR,     TG(_GAME), KC_TRNS, KC_P1, KC_P2,   KC_P3,  KC_PSLS, KC_PENT,
                       KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS,   KC_P0,   KC_P0, KC_TRNS, KC_TRNS),
@@ -65,7 +110,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
-
 // --------------- ЛЕВАЯ КРУТИЛКА ------------------
     if (index == 0) {
 // --------------- layer 4------------------
@@ -181,6 +225,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 }
     return true;
 }
+
 // Default keymap. This can be changed in Via. Use oled.c and encoder.c to change beavior that Via cannot change.
 
 // const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
