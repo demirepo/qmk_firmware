@@ -28,8 +28,6 @@ for more options.
 //#define RGBLED_SPLIT {7,7}
 //#define RGBLIGHT_ANIMATIONS
 
-#undef TAPPING_TERM
-#define TAPPING_TERM    150
 #define IGNORE_MOD_TAP_INTERRUPT // this makes it possible to do rolling combos (zx) with keys that convert to other keys on hold (z becomes ctrl when you hold it, and when this option isn't enabled, z rapidly followed by x actually sends Ctrl-x. That's bad.)
 #define ONESHOT_TAP_TOGGLE 3  /* Tapping this number of times holds the key until tapped once again. */
 #define ONESHOT_TIMEOUT 1000
@@ -61,6 +59,13 @@ for more options.
 // #define OLED_SCROLL_TIMEOUT 1
 //default 255
 #define OLED_BRIGHTNESS 1
+
+#define TAPPING_TERM_PER_KEY
+
+#define BOOTMAGIC_KEY_SALT KC_K
+#define BOOTMAGIC_KEY_EE_HANDS_LEFT KC_J
+#define BOOTMAGIC_KEY_EE_HANDS_RIGHT KC_L
+
 
 /* disable debug print */
 // #define NO_DEBUG
