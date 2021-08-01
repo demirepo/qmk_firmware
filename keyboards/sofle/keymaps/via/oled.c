@@ -1,19 +1,19 @@
  /* Copyright 2020 Josef Adamcik
   * Modification for VIA support and RGB underglow by Jens Bonk-Wiltfang
-  * 
-  * This program is free software: you can redistribute it and/or modify 
-  * it under the terms of the GNU General Public License as published by 
-  * the Free Software Foundation, either version 2 of the License, or 
-  * (at your option) any later version. 
-  * 
-  * This program is distributed in the hope that it will be useful, 
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of 
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-  * GNU General Public License for more details. 
-  * 
-  * You should have received a copy of the GNU General Public License 
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-  */ 
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 2 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
 
 //Sets up what the OLED screens display.
 
@@ -29,6 +29,21 @@ static void render_logo(void) {
     oled_write_P(qmk_logo, false);
 }
 
+static void render_dao(void) {
+    static const char PROGMEM qmk_dao[] = {
+        0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xff, 0xff, 0xe0, 0x07, 0xff,
+        0xff, 0x80, 0x01, 0xff, 0xfe, 0x00, 0x00, 0xff, 0xfc, 0x0f, 0xe0, 0x3f, 0xf8, 0x3f, 0xf0, 0x3f,
+        0xf8, 0x7f, 0xf8, 0x1f, 0xf0, 0xfe, 0x78, 0x0f, 0xf1, 0xfc, 0x78, 0x0f, 0xe1, 0xfc, 0x78, 0x07,
+        0xe3, 0xff, 0xf8, 0x07, 0xe3, 0xff, 0xf0, 0x07, 0xc3, 0xff, 0xf0, 0x07, 0xc3, 0xff, 0xc0, 0x07,
+        0xc3, 0xfc, 0x00, 0x07, 0xe3, 0xf0, 0x00, 0x07, 0xe3, 0xf0, 0x00, 0x07, 0xe3, 0xe1, 0x80, 0x07,
+        0xe1, 0xe3, 0xc0, 0x07, 0xf1, 0xe3, 0xc0, 0x0f, 0xf0, 0xe1, 0x80, 0x0f, 0xf8, 0x70, 0x00, 0x1f,
+        0xf8, 0x30, 0x00, 0x3f, 0xfc, 0x08, 0x00, 0x7f, 0xfe, 0x00, 0x00, 0xff, 0xff, 0x80, 0x01, 0xff,
+        0xff, 0xe0, 0x07, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00
+    };
+
+    oled_write_P(qmk_dao, false);
+}
+
 static void print_status_narrow(void) {
     // Print current mode
     oled_write_P(PSTR("\n\n"), false);
@@ -38,7 +53,7 @@ static void print_status_narrow(void) {
             oled_write_ln_P(PSTR("Qwrt"), false);
             break;
         case 1:
-            oled_write_ln_P(PSTR("Clmk"), false);
+            oled_write_ln_P(PSTR("Game"), false);
             break;
         default:
             oled_write_P(PSTR("Mod\n"), false);
@@ -49,14 +64,19 @@ static void print_status_narrow(void) {
     oled_write_ln_P(PSTR("LAYER"), false);
     switch (get_highest_layer(layer_state)) {
         case 0:
-        case 1:
             oled_write_P(PSTR("Base\n"), false);
             break;
+        case 1:
+            oled_write_P(PSTR("Game\n"), false);
+            break;
         case 2:
-            oled_write_P(PSTR("Raise"), false);
+            oled_write_P(PSTR("Num"), false);
             break;
         case 3:
-            oled_write_P(PSTR("Lower"), false);
+            oled_write_P(PSTR("Nav"), false);
+            break;
+        case 4:
+            oled_write_P(PSTR("_FN4"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
@@ -66,9 +86,15 @@ static void print_status_narrow(void) {
     oled_write_ln_P(PSTR("CPSLK"), led_usb_state.caps_lock);
 }
 
+void oled_task_user1(void) {
+    render_dao();
+}
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_master()) {
         return OLED_ROTATION_270;
+    } else {
+        return OLED_ROTATION_180;
     }
     return rotation;
 }

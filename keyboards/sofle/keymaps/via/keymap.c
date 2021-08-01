@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     C_S_T(KC_TAB),  KC_Q,         KC_W,    KC_E,    KC_R,    KC_T,                                       KC_Y,    KC_U,        KC_I,    KC_O,    C_S_T(KC_P),      KC_LBRC,
     LCTL_T(KC_ESC), KC_A,         KC_S,    KC_D,    KC_F,    KC_G,                                       KC_H,    KC_J,        KC_K,     KC_L,    RCTL_T(KC_SCLN),  KC_QUOT,
     OSM(MOD_LSFT),  LCA_T(KC_Z),  KC_X,    KC_C,    KC_V,    KC_B,     C(KC_X),                KC_MPLY,  KC_N,    KC_M,        KC_COMM, KC_DOT,  LCA_T(KC_SLSH),   OSM(MOD_LSFT),
-                                  KC_LGUI, KC_TRNS, KC_LALT, MO(_NUM), LSFT_T(KC_SPC),     LT(_NUM, KC_SPC), LT(_NAV,KC_BSPC), KC_RALT, KC_ENT,  KC_BSLS),
+                          KC_LGUI, KC_TRNS, LALT_T(KC_TRNS), MO(_NUM), LSFT_T(KC_SPC),     LT(_NUM, KC_SPC), LT(_NAV,KC_BSPC), RALT_T(KC_TRNS), KC_ENT,  KC_BSLS),
 
 	[_GAME] = LAYOUT(
     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,      KC_5,                            KC_CIRC,  KC_AMPR, KC_ASTR, KC_BSLS, KC_MINS, KC_EQL,

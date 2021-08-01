@@ -50,8 +50,17 @@ for more options.
 
 //If your encoders clockwise directions are incorrect, you can swap the A & B pad definitions. They can also be flipped with a define:
 #define ENCODER_DIRECTION_FLIP
+
 //Additionally, the resolution, which defines how many pulses the encoder registers between each detent, can be defined with:
 //#define ENCODER_RESOLUTION { 4, 2 }
+
+//Enables fade out animation. Use together with OLED_TIMEOUT
+#define OLED_FADE_OUT
+#define OLED_TIMEOUT 60000
+//Scrolls the OLED screen after 0ms of OLED inactivity. Helps reduce OLED Burn-in. Set to 0 to disable.
+// #define OLED_SCROLL_TIMEOUT 1
+//default 255
+#define OLED_BRIGHTNESS 1
 
 /* disable debug print */
 // #define NO_DEBUG
