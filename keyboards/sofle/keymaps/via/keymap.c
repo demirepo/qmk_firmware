@@ -336,8 +336,12 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     } else if (IS_LAYER_ON(_NAV)) {
             if (clockwise) {
                 tap_code16(KC_VOLU);    // громче
+                tap_code16(KC_VOLU);    // громче
+                tap_code16(KC_VOLU);    // громче
             }
             else {
+                tap_code16(KC_VOLD);    // тише
+                tap_code16(KC_VOLD);    // тише
                 tap_code16(KC_VOLD);    // тише
             }
 // --------------- NUM------------------
