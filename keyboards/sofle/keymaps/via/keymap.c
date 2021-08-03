@@ -667,13 +667,11 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     tap_code16(C(KC_Y));         //отмена вперед
                     register_mods(MOD_LSFT);
                 } else if (get_mods() & MOD_BIT(KC_LALT)) {
-                    clear_mods();
-                    tap_code16(KC_PGDN);         // прокрутка вверх
-                    register_mods(MOD_LALT);
-                } else if (get_mods() & MOD_MASK_CTRL) {
-                    clear_mods();
+                    tap_code16(C(KC_P5));         // на правую панель вс код
+                } else if (get_mods() & MOD_BIT(KC_RCTL)) {
+                    unregister_mods(MOD_RCTL);
                     tap_code16(G(S(KC_RIGHT)));         // переместить окно на другой монитор
-                    register_mods(MOD_MASK_CTRL);
+                    tap_code16(KC_RCTL);         // переместить окно на другой монитор
                 }
                 else {
                     tap_code16(C(KC_V));        //вставка
@@ -684,13 +682,11 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     tap_code16(C(KC_Z));        //отмена назад
                     register_mods(MOD_LSFT);
                 } else if (get_mods() & MOD_BIT(KC_LALT)) {
-                    clear_mods();
-                    tap_code16(KC_PGUP);         // прокрутка вниз
-                    register_mods(MOD_LALT);
-                } else if (get_mods() & MOD_MASK_CTRL) {
-                    clear_mods();
+                    tap_code16(C(KC_P4));         // на левую панель вс код
+                } else if (get_mods() & MOD_BIT(KC_RCTL)) {
+                    unregister_mods(MOD_RCTL);
                     tap_code16(G(S(KC_LEFT)));         // переместить окно на другой монитор
-                    register_mods(MOD_MASK_CTRL);
+                    tap_code16(KC_RCTL);         // переместить окно на другой монитор
                 }
                 else {
                     tap_code16(C(KC_C));         //копирование
