@@ -62,6 +62,8 @@ enum {              // Tap dance enums
 // Произвольные длительности нажатий, чтобы успевать кликать дважды
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case M_AF4:
+            return 500;
         case OSM(MOD_LSFT):
             return 200;
         case TD(TD_SCLN):
@@ -160,8 +162,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     LT(_FN4, KC_GRV),TD(TD_1),     TD(TD_2), TD(TD_3), TD(TD_4), TD(TD_5),                               TD(TD_6),  TD(TD_7), TD(TD_8),TD(TD_9),TD(TD_10),       TD(TD_11),
     C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,          C_S_T(KC_LBRC),
     LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN),   RCTL_T(KC_QUOT),
-    OSM(MOD_LSFT),   LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),MOD_LSFT,
-                    KC_LGUI, KC_TRNS, LALT_T(KC_NO),   MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), RALT_T(KC_NO), LT(_FN4, KC_ENT), KC_BSLS),
+    OSM(MOD_LSFT),   LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
+                     KC_LGUI,      KC_TRNS,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), RALT_T(KC_NO), LT(_FN4, KC_ENT), KC_BSLS),
 
 	[_GAME] = LAYOUT(
     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,      KC_5,                            DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
@@ -659,31 +661,55 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 tap_code16(KC_F5);
             }
 // --------------- HOME LAYER------------------
-    } else {
-            if (clockwise) {
+    } else  if (clockwise) {
                 if (get_mods() & MOD_BIT(KC_LSHIFT)) {
                     unregister_mods(MOD_LSFT);
                     tap_code16(C(KC_Y));         //отмена вперед
                     register_mods(MOD_LSFT);
-                } else if (get_mods() & MOD_BIT(KC_LALT)) {                         //эта часть пока не рабоает, что-то с режимом альта
-                    unregister_mods(MOD_LALT);                                      //эта часть пока не рабоает
-                    SEND_STRING(SS_LCTL("ax")); // выделение всего и вырезание      //эта часть пока не работает
-                    register_mods(MOD_LALT);                                        //эта часть пока не рабоает
-                } else {
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {
+                    clear_mods();
+                    tap_code16(KC_PGDN);         // прокрутка вверх
+                    register_mods(MOD_LALT);
+                } else if (get_mods() & MOD_MASK_CTRL) {
+                    clear_mods();
+                    tap_code16(G(S(KC_RIGHT)));         // переместить окно на другой монитор
+                    register_mods(MOD_MASK_CTRL);
+                }
+                else {
                     tap_code16(C(KC_V));        //вставка
                 }
-            } else if (get_mods() & MOD_BIT(KC_LSHIFT)) {
+            } else {
+                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
                     unregister_mods(MOD_LSFT);
                     tap_code16(C(KC_Z));        //отмена назад
                     register_mods(MOD_LSFT);
-            } else if (get_mods() & MOD_BIT(KC_LALT)) {                             //эта часть пока не работает
-                    unregister_mods(MOD_LALT);                                      //эта часть пока не работает
-                    SEND_STRING(SS_LCTL("ac")); // выделение всего и вырезание      //эта часть пока не рабоает
-                    register_mods(MOD_LALT);                                        //эта часть пока не работает
-            } else {
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {
+                    clear_mods();
+                    tap_code16(KC_PGUP);         // прокрутка вниз
+                    register_mods(MOD_LALT);
+                } else if (get_mods() & MOD_MASK_CTRL) {
+                    clear_mods();
+                    tap_code16(G(S(KC_LEFT)));         // переместить окно на другой монитор
+                    register_mods(MOD_MASK_CTRL);
+                }
+                else {
                     tap_code16(C(KC_C));         //копирование
-            }
-    }
+                }
+          }
+
+// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case M_ARROW:
+//         if (record->event.pressed) {
+//             // when keycode QMKBEST is pressed
+//             SEND_STRING("=>");
+//         } else {
+//             // when keycode QMKBEST is released
+//         }
+//         break;
+//     }
+// }
+
 // --------------- ПРАВАЯ КРУТИЛКА ------------------
 } else if (index == 1) {
     if (IS_LAYER_ON(_FN4)) {
@@ -749,23 +775,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING(SS_DOWN(X_LALT) SS_DOWN(X_LSFT) SS_TAP(X_LEFT) SS_UP(X_LSFT) SS_UP(X_LALT));
         }
         break;
-    case KC_BSPC:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_DEL) SS_UP(X_LCTL));
+        case KC_BSPC: {
+            if (record->event.pressed) {
+                if (get_mods() & MOD_MASK_SHIFT) {
+                    unregister_code(KC_LSFT);
+                    SEND_STRING(SS_TAP(X_DEL));
+                    register_code(KC_LSFT);
+                } else {
+
+                }
             } else {
-                tap_code16(LT(_NAV,KC_BSPC));
+
             }
-        } else {
-            // when keycode is released
-        }
-        break;
-    case M_ARROW:
+            return false;
+            break;
+        }    case M_ARROW:
         if (record->event.pressed) {
             // when keycode QMKBEST is pressed
             SEND_STRING("=>");
-            // SEND_STRING(SS_TAP(X_EQL) SS_TAP(X_GT));      эту строку переписать, выдает ошибку
         } else {
             // when keycode QMKBEST is released
         }
@@ -779,8 +806,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         break;
     case M_AF4:
-            tap_code16(A(KC_F4));
+            if (record->event.pressed) {
+            // when keycode is pressed
+            SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_F4) SS_UP(X_LALT));
+        } else {
+            // when keycode is released
+
+        }
         break;
+
+            // register_code16(KC_LALT);
+            // register_code16(KC_F4);
+
+            // SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_F4) SS_DELAY(5000) SS_UP(X_LALT));
     case M_1:
         if (record->event.pressed) {
             if (get_mods() & MOD_MASK_SHIFT) {
