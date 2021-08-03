@@ -163,7 +163,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,          C_S_T(KC_LBRC),
     LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN),   RCTL_T(KC_QUOT),
     OSM(MOD_LSFT),   LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
-                     KC_LGUI,      KC_TRNS,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), RALT_T(KC_NO), LT(_FN4, KC_ENT), KC_BSLS),
+                     KC_LGUI,      KC_TRNS,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_FN4, KC_ENT), KC_BSLS),
 
 	[_GAME] = LAYOUT(
     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,      KC_5,                            DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
@@ -637,18 +637,18 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 // --------------- NUM------------------
     } else if (IS_LAYER_ON(_NUM)) {
             if (clockwise) {
-                if (get_mods() & MOD_BIT(KC_LALT)) {
-                    unregister_mods(MOD_LALT);
-                    tap_code16(C(G(KC_RIGHT)));        //на правый рабочий стол
-                    register_mods(MOD_LALT);
+                if (get_mods() & MOD_BIT(KC_RALT)) {
+                    unregister_mods(MOD_RALT);
+                    tap_code16(C(G(KC_RIGHT)));        // на правый рабочий стол (зажать func+alt)
+                    register_mods(MOD_RALT);
                 } else {
-                    SEND_STRING(SS_LCTL("ax"));         //вырезание с выделением всего
+                    SEND_STRING(SS_LCTL("ax"));         // вырезание с выделением всего
                 }
             } else {
-                if (get_mods() & MOD_BIT(KC_LALT)) {
-                    unregister_mods(MOD_LALT);
-                    tap_code16(C(G(KC_LEFT)));        ////на левый рабочий стол
-                    register_mods(MOD_LALT);
+                if (get_mods() & MOD_BIT(KC_RALT)) {
+                    unregister_mods(MOD_RALT);
+                    tap_code16(C(G(KC_LEFT)));        // на левый рабочий стол (зажать func+alt)
+                    register_mods(MOD_RALT);
                 } else {
                     SEND_STRING(SS_LCTL("ac"));         //копирование с выделением всего
                 }
@@ -667,11 +667,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     tap_code16(C(KC_Y));         //отмена вперед
                     register_mods(MOD_LSFT);
                 } else if (get_mods() & MOD_BIT(KC_LALT)) {
+                    tap_code16(C(A(KC_RIGHT)));         // переместить вкладку вс кода в правую группу
+                } else if (get_mods() & MOD_BIT(KC_RALT)) {
                     tap_code16(C(KC_P5));         // на правую панель вс код
                 } else if (get_mods() & MOD_BIT(KC_RCTL)) {
                     unregister_mods(MOD_RCTL);
                     tap_code16(G(S(KC_RIGHT)));         // переместить окно на другой монитор
-                    tap_code16(KC_RCTL);         // переместить окно на другой монитор
+                    tap_code16(KC_RCTL);
                 }
                 else {
                     tap_code16(C(KC_V));        //вставка
@@ -682,11 +684,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     tap_code16(C(KC_Z));        //отмена назад
                     register_mods(MOD_LSFT);
                 } else if (get_mods() & MOD_BIT(KC_LALT)) {
+                    tap_code16(C(A(KC_LEFT)));         // переместить вкладку вс кода в левую группу
+                } else if (get_mods() & MOD_BIT(KC_RALT)) {
                     tap_code16(C(KC_P4));         // на левую панель вс код
                 } else if (get_mods() & MOD_BIT(KC_RCTL)) {
                     unregister_mods(MOD_RCTL);
                     tap_code16(G(S(KC_LEFT)));         // переместить окно на другой монитор
-                    tap_code16(KC_RCTL);         // переместить окно на другой монитор
+                    tap_code16(KC_RCTL);
                 }
                 else {
                     tap_code16(C(KC_C));         //копирование
