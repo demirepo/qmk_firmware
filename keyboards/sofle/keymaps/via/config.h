@@ -111,4 +111,6 @@ for more options.
     #define KTD_11 KC_EQL
 #endif
 
+#define _______ KC_TRNS
+
 
