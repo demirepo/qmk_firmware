@@ -19,6 +19,7 @@
 #include "oled.c"
 #include "somefile.c"
 
+
 enum layer_names {
   _HOME,
   _GAME,
@@ -74,31 +75,31 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return 500;
         case OSM(MOD_LSFT):
             return 200;
-        case TD(TD_SCLN):
+        case KTD_SCLN:
             return 200;
-        case TD(TD_1):
+        case KTD_1:
             return 200;
-        case TD(TD_2):
+        case KTD_2:
             return 200;
-        case TD(TD_3):
+        case KTD_3:
             return 200;
-        case TD(TD_4):
+        case KTD_4:
             return 200;
-        case TD(TD_5):
+        case KTD_5:
             return 200;
-        case TD(TD_6):
+        case KTD_6:
             return 200;
-        case TD(TD_7):
+        case KTD_7:
             return 200;
-        case TD(TD_8):
+        case KTD_8:
             return 200;
-        case TD(TD_9):
+        case KTD_9:
             return 200;
-        case TD(TD_10):
+        case KTD_10:
             return 200;
-        case TD(TD_11):
+        case KTD_11:
             return 200;
-        // case TD(TD_12):
+        // case KTD_12:
         //     return 200;
         default:
             return TAPPING_TERM;
@@ -109,16 +110,16 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_HOME] = LAYOUT(
-    LT(_FN4, KC_GRV),TD(TD_1),     TD(TD_2), TD(TD_3), TD(TD_4), TD(TD_5),                               TD(TD_6),  TD(TD_7), TD(TD_8),TD(TD_9),TD(TD_10),       TD(TD_11),
-    C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,          C_S_T(KC_LBRC),
-    LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN),   RCTL_T(KC_QUOT),
-    OSM(MOD_LSFT),   LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
+    LT(_FN4, KC_GRV),KTD_1,        KTD_2,   KTD_3,     KTD_4,    KTD_5,                                     KTD_6,   KTD_7,   KTD_8,   KTD_9,   KTD_10,     KTD_11,
+    C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       C_S_T(KC_LBRC),
+    LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    KTD_SCLN,   RCTL_T(KC_QUOT),
+    KC_LSFT,         LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
                      KC_LGUI,      KC_TRNS,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_FN4, KC_ENT), KC_BSLS),
 
 	[_GAME] = LAYOUT(
     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,      KC_5,                            DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,      KC_T,                            KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
-    KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,      KC_G,                            KC_H,     KC_J,    KC_K,    KC_L,    TD(TD_SCLN),    KC_QUOT,
+    KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,      KC_G,                            KC_H,     KC_J,    KC_K,    KC_L,    KTD_SCLN,    KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,      KC_B,   KC_MUTE,      TG(_GAME), KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_BSPC,
                       KC_F9, KC_BSPC, KC_LALT,   MO(_FN4), KC_SPC,         KC_ENT,  LT(_NAV,KC_BSPC), KC_RCTL, EH_LEFT, EH_RGHT),
 
@@ -137,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       KC_TRNS, KC_TRNS, KC_ACL0, KC_ACL0, KC_ACL0,           KC_NO,   KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS),
 
 	[_FN4] = LAYOUT(
-    KC_NO,    KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,                             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
+    KC_NO,    G(S(KC_F)), KC_NO,   KC_NO,   KC_NO,   KC_NO,                             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
     RESET,    KC_NO, DF(0),   DF(1),   CG_TOGG, TG(_FN4),                          KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
     TG(_FN4), KC_NO, KC_NO,   KC_TRNS, KC_TRNS, KC_TRNS,                           KC_NO,   KC_MPRV, KC_MPLY, KC_MNXT, KC_NO, KC_NO,
     KC_NO,    KC_NO, KC_NO,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,        TG(_FN4), KC_NO,   KC_VOLD, KC_MUTE, KC_VOLU, KC_NO, KC_NO,
@@ -273,19 +274,45 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 tap_code16(KC_VOLD);
             }
 // --------------- home layer------------------
-    } else {
+    } else if (IS_LAYER_ON(_HOME)) {
             if (clockwise) {
-                tap_code16(C(KC_PGDOWN));       //переключение внутренних вкладок вперед
-            }
-            else {
-                tap_code16(C(KC_PGUP));         //переключение внутренних вкладок назад
-            }
-    }
+                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
 
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {
+
+                } else if (get_mods() & MOD_BIT(KC_RALT)) {
+
+                } else if (get_mods() & MOD_BIT(KC_LCTL)) {
+                    clear_mods();
+                    tap_code16(A(KC_SPC));
+//                    clear_keyboard();                         //
+                    tap_code16(KC_X);                               //
+                }
+                else {
+                    tap_code16(C(KC_PGDN));                        //
+                }
+            } else {
+
+                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
+
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {
+
+                } else if (get_mods() & MOD_BIT(KC_RALT)) {
+
+                } else if (get_mods() & MOD_BIT(KC_LCTL)) {
+                    clear_mods();
+                    tap_code16(A(KC_SPC));
+//                    clear_keyboard();                         //
+                    tap_code16(KC_N);                               //
+                }
+                else {
+                    tap_code16(C(KC_PGUP));                        //
+                }
+                }
+    }
 }
     return true;
 }
-
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {

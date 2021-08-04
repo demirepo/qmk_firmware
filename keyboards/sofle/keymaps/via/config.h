@@ -81,3 +81,34 @@ for more options.
 //#define NO_ACTION_FUNCTION
 //#define DEBUG_MATRIX_SCAN_RATE
 
+#ifdef TAP_DANCE_ENABLE
+    #define KTD_SCLN TD(TD_SCLN)
+    #define KTD_1 TD(TD_1)
+    #define KTD_2 TD(TD_2)
+    #define KTD_3 TD(TD_3)
+    #define KTD_4 TD(TD_4)
+    #define KTD_5 TD(TD_5)
+    #define KTD_6 TD(TD_6)
+    #define KTD_7 TD(TD_7)
+    #define KTD_8 TD(TD_8)
+    #define KTD_9 TD(TD_9)
+    #define KTD_10 TD(TD_10)
+    #define KTD_11 TD(TD_11)
+#endif
+
+#ifndef TAP_DANCE_ENABLE
+    #define KTD_SCLN KC_SCLN
+    #define KTD_1 KC_EXLM
+    #define KTD_2 KC_AT
+    #define KTD_3 KC_HASH
+    #define KTD_4 KC_DOLLAR
+    #define KTD_5 KC_PERCENT
+    #define KTD_6 KC_CIRCUMFLEX
+    #define KTD_7 KC_AMPERSAND
+    #define KTD_8 KC_ASTERISK
+    #define KTD_9 KC_RBRC
+    #define KTD_10 KC_MINS
+    #define KTD_11 KC_EQL
+#endif
+
+
