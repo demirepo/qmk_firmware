@@ -17,6 +17,7 @@
 
 #include QMK_KEYBOARD_H
 #include "oled.c"
+#include "somefile.c"
 
 enum layer_names {
   _HOME,
@@ -28,6 +29,7 @@ enum layer_names {
 
 enum custom_keycodes {          // макросы
     M_ARROW = SAFE_RANGE,
+    M_PW,
     M_SLCT,
     M_AF4,
     M_1,
@@ -40,6 +42,12 @@ enum custom_keycodes {          // макросы
     M_8,
     M_SLEXT,
     M_SLSHR,
+    LEFT_CW_HOME,
+    LEFT_CCW_HOME,
+    LEFT_TAP,
+    RIGHT_CW,
+    RIGHT_CCW,
+    RIGHT_TAP,
 };
 
 // ==========================Тап дэнс секция==============================
@@ -96,6 +104,358 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
+
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+	[_HOME] = LAYOUT(
+    LT(_FN4, KC_GRV),TD(TD_1),     TD(TD_2), TD(TD_3), TD(TD_4), TD(TD_5),                               TD(TD_6),  TD(TD_7), TD(TD_8),TD(TD_9),TD(TD_10),       TD(TD_11),
+    C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,          C_S_T(KC_LBRC),
+    LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN),   RCTL_T(KC_QUOT),
+    OSM(MOD_LSFT),   LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
+                     KC_LGUI,      KC_TRNS,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_FN4, KC_ENT), KC_BSLS),
+
+	[_GAME] = LAYOUT(
+    KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,      KC_5,                            DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
+    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,      KC_T,                            KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
+    KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,      KC_G,                            KC_H,     KC_J,    KC_K,    KC_L,    TD(TD_SCLN),    KC_QUOT,
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,      KC_B,   KC_MUTE,      TG(_GAME), KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_BSPC,
+                      KC_F9, KC_BSPC, KC_LALT,   MO(_FN4), KC_SPC,         KC_ENT,  LT(_NAV,KC_BSPC), KC_RCTL, EH_LEFT, EH_RGHT),
+
+	[_NUM] = LAYOUT(
+    M_PW, KC_F1,   KC_F2,   KC_F3,   KC_F4,    KC_F5,                              KC_F6,   KC_F7, KC_F8,   KC_F9,  KC_F10,  KC_F11,
+    KC_CAPS, M_ARROW, KC_GT,   KC_RBRC, KC_RPRN,  KC_RCBR,                            KC_PCMM, KC_P7, KC_P8,   KC_P9,  KC_PAST, KC_F12,
+    DM_RSTP, M_SLCT,  KC_LT,   KC_LBRC, KC_LPRN,  KC_LCBR,                            KC_PDOT, KC_P4, KC_P5,   KC_P6,  KC_P0, KC_PPLS,
+    DM_REC1, DM_PLY1, A(KC_X), A(KC_C), A( KC_V), A(KC_B), KC_SLEP,         TG(_GAME),KC_TRNS, KC_P1, KC_P2,   KC_P3,  KC_PSLS, KC_PENT,
+                      KC_LOCK, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,  KC_P0,   KC_PMNS, KC_TRNS, KC_TRNS),
+
+	[_NAV] = LAYOUT(
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                             G(KC_1),    G(KC_2),    G(KC_3),    G(KC_4),    G(KC_5), G(KC_6),
+    KC_TRNS, KC_PSCR, KC_BTN1, KC_MS_U, KC_TRNS, KC_TRNS,                             KC_DEL,     KC_HOME,    KC_END,     KC_TRNS,    KC_INS,  KC_PGUP,
+    KC_TRNS, KC_BTN2, KC_MS_L, KC_MS_D, KC_MS_R, KC_TRNS,                             KC_LEFT,    KC_DOWN,    KC_UP,      KC_RGHT,    KC_ENT,  KC_PGDN,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PWR,            KC_TRNS, M_SLSHR,    C(KC_LEFT), C(KC_RGHT), M_SLEXT,    M_SLCT, M_AF4,
+                      KC_TRNS, KC_TRNS, KC_ACL0, KC_ACL0, KC_ACL0,           KC_NO,   KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS),
+
+	[_FN4] = LAYOUT(
+    KC_NO,    KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,                             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
+    RESET,    KC_NO, DF(0),   DF(1),   CG_TOGG, TG(_FN4),                          KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
+    TG(_FN4), KC_NO, KC_NO,   KC_TRNS, KC_TRNS, KC_TRNS,                           KC_NO,   KC_MPRV, KC_MPLY, KC_MNXT, KC_NO, KC_NO,
+    KC_NO,    KC_NO, KC_NO,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,        TG(_FN4), KC_NO,   KC_VOLD, KC_MUTE, KC_VOLU, KC_NO, KC_NO,
+                     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,        KC_TRNS,  KC_TRNS, KC_TRNS, MO(_FN4), KC_TRNS)
+};
+
+
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+// --------------- ЛЕВАЯ КРУТИЛКА ------------------
+    if (index == 0) {
+// --------------- layer 4------------------
+        if (IS_LAYER_ON(_FN4)) {
+            if (clockwise) {
+                // Здесь мог бы быть ваш keycode
+            } else {
+                // Здесь мог бы быть ваш keycode
+            }
+// --------------- NAV------------------
+    } else if (IS_LAYER_ON(_NAV)) {
+            if (clockwise) {
+                tap_code16(KC_VOLU);
+            } else {
+                tap_code16(KC_VOLD);
+            }
+// --------------- NUM------------------
+    } else if (IS_LAYER_ON(_NUM)) {
+            if (clockwise) {
+                if (get_mods() & MOD_BIT(KC_RALT)) {
+                    unregister_mods(MOD_RALT);
+                    tap_code16(C(G(KC_RIGHT)));        // на правый рабочий стол (зажать func+alt)
+                    register_mods(MOD_RALT);
+                } else {
+                    SEND_STRING(SS_LCTL("ax"));         // вырезание с выделением всего
+                }
+            } else {
+                if (get_mods() & MOD_BIT(KC_RALT)) {
+                    unregister_mods(MOD_RALT);
+                    tap_code16(C(G(KC_LEFT)));        // на левый рабочий стол (зажать func+alt)
+                    register_mods(MOD_RALT);
+                } else {
+                    SEND_STRING(SS_LCTL("ac"));         //копирование с выделением всего
+                }
+            }
+// --------------- GAME------------------
+    } else if (IS_LAYER_ON(_GAME)) {
+            if (clockwise) {
+                tap_code16(KC_F9);                      // загрузка
+            } else {
+                tap_code16(KC_F5);                      // сохранение
+            }
+// --------------- HOME LAYER------------------
+    } else  if (clockwise) {
+                // tap_code16(LEFT_CW_HOME);
+
+
+                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
+                    unregister_mods(MOD_LSFT);
+                    tap_code16(C(KC_Y));         //отмена вперед
+                    register_mods(MOD_LSFT);
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {
+                    tap_code16(C(A(KC_RIGHT)));         // переместить вкладку вс кода в правую группу
+                    clear_mods();
+                } else if (get_mods() & MOD_BIT(KC_RALT)) {
+                    tap_code16(C(KC_P5));         //переход на правую панель вс код
+                } else if (get_mods() & MOD_BIT(KC_RCTL)) {
+                    unregister_mods(MOD_RCTL);
+                    tap_code16(G(S(KC_RIGHT)));         // переместить окно на другой монитор
+                    tap_code16(KC_RCTL);
+                }
+                else {
+                    tap_code16(C(KC_V));        //вставка
+                }
+            } else {
+                // tap_code16(LEFT_CCW_HOME);
+
+
+                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
+                    unregister_mods(MOD_LSFT);
+                    tap_code16(C(KC_Z));        //отмена назад
+                    register_mods(MOD_LSFT);
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {
+                    tap_code16(C(A(KC_LEFT)));         // переместить вкладку вс кода в левую группу
+                    clear_mods();
+                } else if (get_mods() & MOD_BIT(KC_RALT)) {
+                    tap_code16(C(KC_P4));         // переход на левую панель вс код
+                } else if (get_mods() & MOD_BIT(KC_RCTL)) {
+                    unregister_mods(MOD_RCTL);
+                    tap_code16(G(S(KC_LEFT)));         // переместить окно на другой монитор
+                    tap_code16(KC_RCTL);
+                }
+                else {
+                    tap_code16(C(KC_C));         //копирование
+                }
+          }
+
+// --------------- ПРАВАЯ КРУТИЛКА ------------------
+} else if (index == 1) {
+    if (IS_LAYER_ON(_FN4)) {
+            if (clockwise) {
+                tap_code16(C(KC_PGDOWN));
+            }
+            else {
+                tap_code16(C(KC_PGUP));
+            }
+// --------------- NAV------------------
+    } else if (IS_LAYER_ON(_NAV)) {
+            if (clockwise) {
+                tap_code16(KC_VOLU);    // громче
+                tap_code16(KC_VOLU);    // громче
+                tap_code16(KC_VOLU);    // громче
+            }
+            else {
+                tap_code16(KC_VOLD);    // тише
+                tap_code16(KC_VOLD);    // тише
+                tap_code16(KC_VOLD);    // тише
+            }
+// --------------- NUM------------------
+    } else if (IS_LAYER_ON(_NUM)) {
+            if (clockwise) {
+                tap_code16(A(KC_RIGHT));    // навигация по альт + стрелка
+            }
+            else {
+                tap_code16(A(KC_LEFT));     // навигация по альт + стрелка
+            }
+// --------------- GAME------------------
+
+    } else if (IS_LAYER_ON(_GAME)) {
+            if (clockwise) {
+                tap_code16(KC_VOLU);
+            }
+            else {
+                tap_code16(KC_VOLD);
+            }
+// --------------- home layer------------------
+    } else {
+            if (clockwise) {
+                tap_code16(C(KC_PGDOWN));       //переключение внутренних вкладок вперед
+            }
+            else {
+                tap_code16(C(KC_PGUP));         //переключение внутренних вкладок назад
+            }
+    }
+
+}
+    return true;
+}
+
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case M_SLEXT:
+        if (record->event.pressed) {
+            SEND_STRING(SS_DOWN(X_LALT) SS_DOWN(X_LSFT) SS_TAP(X_RIGHT) SS_UP(X_LSFT) SS_UP(X_LALT));
+        }
+        break;
+    case M_PW:
+        if (record->event.pressed) {
+            SEND_STRING(PW);
+        }
+        break;
+    case M_SLSHR:
+        if (record->event.pressed) {
+            SEND_STRING(SS_DOWN(X_LALT) SS_DOWN(X_LSFT) SS_TAP(X_LEFT) SS_UP(X_LSFT) SS_UP(X_LALT));
+        }
+        break;
+        // case KC_BSPC: {
+        //     if (record->event.pressed) {
+        //         if (get_mods() & MOD_MASK_SHIFT) {
+        //             unregister_code(KC_LSFT);
+        //             SEND_STRING(SS_TAP(X_DEL));
+        //             register_code(KC_LSFT);
+        //         } else {
+
+        //         }
+        //     } else {
+
+        //     }
+        //     return false;
+        //     break;
+        case M_ARROW:
+        if (record->event.pressed) {
+            // when keycode QMKBEST is pressed
+            SEND_STRING("=>");
+        } else {
+            // when keycode QMKBEST is released
+        }
+        break;
+    case M_SLCT:
+        if (record->event.pressed) {
+            // when keycode QMKURL is pressed
+            SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_LEFT) SS_UP(X_LCTL) SS_DOWN(X_LSFT) SS_DOWN(X_LCTL) SS_TAP(X_RIGHT) SS_UP(X_LCTL) SS_UP(X_LSFT));
+        } else {
+            // when keycode QMKURL is released
+        }
+        break;
+    case M_AF4:
+            if (record->event.pressed) {
+            // when keycode is pressed
+            SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_F4) SS_UP(X_LALT));
+        } else {
+            // when keycode is released
+
+        }
+        break;
+    // Левая крутилка ПО часовой стрелке HOME LAYER
+    case LEFT_CW_HOME:
+        if (record->event.pressed) {
+            if (((get_mods() & MOD_BIT(KC_LALT))) == MOD_BIT(KC_LALT)) {
+                tap_code16(C(KC_RIGHT));                                    // переместить вкладку вс кода в правую группу
+            } else if ((get_mods() & MOD_BIT(KC_RALT)) == MOD_BIT(KC_RALT)) {
+                tap_code16(C(KC_P5));                                       //переход на правую панель вс код
+            } else if ((get_mods() & MOD_BIT(KC_LCTL)) == MOD_BIT(KC_LCTL)) {
+                // невозможно пользоваться сочетанием
+            } else if ((get_mods() & MOD_BIT(KC_RCTL)) == MOD_BIT(KC_RCTL)) {
+                    unregister_mods(MOD_RCTL);
+                    tap_code16(G(S(KC_RIGHT)));                             // переместить окно на другой монитор
+            } else if ((get_mods() & MOD_BIT(KC_LSFT)) == MOD_BIT(KC_LSFT)) {
+                unregister_mods(MOD_LSFT);
+                tap_code16(C(KC_Y));                                        //отмена вперед
+                register_mods(MOD_LSFT);
+            } else if ((get_mods() & MOD_BIT(KC_RSFT)) == MOD_BIT(KC_RSFT)) {
+                // СВОБОДНОЕ место для правого шифта
+            } else {
+                tap_code16(C(KC_V));                                        //вставка
+            }
+        } else {
+            if ((get_mods() & MOD_BIT(KC_LALT)) == MOD_BIT(KC_LALT)) {
+                register_mods(MOD_LALT);
+            } else if ((get_mods() & MOD_BIT(KC_RALT)) == MOD_BIT(KC_RALT)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_LCTL)) == MOD_BIT(KC_LCTL)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_RCTL)) == MOD_BIT(KC_RCTL)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_LSHIFT)) == MOD_BIT(KC_LSHIFT)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_RSHIFT)) == MOD_BIT(KC_RSHIFT)) {
+
+            } else {
+                tap_code16(C(KC_C));                                        //копирование
+            }
+        }
+        break;
+//    Левая крутилка ПРОТИВ часовой стрелки HOME LAYER
+    case LEFT_CCW_HOME:
+        if (record->event.pressed) {
+            if ((get_mods() & MOD_BIT(KC_LALT)) == MOD_BIT(KC_LALT)) {
+                tap_code16(C(KC_LEFT));                                  // переместить вкладку вс кода в левую группу
+                clear_mods();
+            } else if ((get_mods() & MOD_BIT(KC_RALT)) == MOD_BIT(KC_RALT)) {
+                tap_code16(C(KC_P4));                                    // переход на левую панель вс код
+            } else if ((get_mods() & MOD_BIT(KC_LCTL)) == MOD_BIT(KC_LCTL)) {
+                // свободное место для левого контрола
+            } else if ((get_mods() & MOD_BIT(KC_RCTL)) == MOD_BIT(KC_RCTL)) {
+                unregister_mods(MOD_RCTL);
+                tap_code16(G(S(KC_LEFT)));                              // переместить окно на другой монитор
+                tap_code16(KC_RCTL);
+            } else if ((get_mods() & MOD_BIT(KC_LSFT)) == MOD_BIT(KC_LSFT)) {
+                unregister_mods(MOD_LSFT);
+                tap_code16(C(KC_Z));                                    //отмена назад
+                register_mods(MOD_LSFT);
+            } else if ((get_mods() & MOD_BIT(KC_RSFT)) == MOD_BIT(KC_RSFT)) {
+                // свободное место для правого шифта
+            } else {
+                tap_code16(C(KC_V));                                        //вставка
+            }
+        } else {
+            if ((get_mods() & MOD_BIT(KC_LALT)) == MOD_BIT(KC_LALT)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_RALT)) == MOD_BIT(KC_RALT)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_LCTL)) == MOD_BIT(KC_LCTL)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_RCTL)) == MOD_BIT(KC_RCTL)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_LSHIFT)) == MOD_BIT(KC_LSHIFT)) {
+
+            } else if ((get_mods() & MOD_BIT(KC_RSHIFT)) == MOD_BIT(KC_RSHIFT)) {
+
+            } else {
+
+            }
+        }
+        break;
+    };
+    return true;
+};
+
+// void register_ctrl_shift (void) {
+//   register_code (KC_LSFT);
+//   register_code (KC_LCTRL);
+// }
+
+// void unregister_ctrl_shift (void) {
+//   unregister_code (KC_LSFT);
+//   unregister_code (KC_LCTRL);
+// }
+
+// void register_ctrl_alt (void) {
+//   register_code (KC_LALT);
+//   register_code (KC_LCTRL);
+// }
+
+// void unregister_ctrl_alt (void) {
+//   unregister_code (KC_LALT);
+//   unregister_code (KC_LCTRL);
+// }
+
+// void register_alt_shift (void) {
+//   register_code (KC_LSFT);
+//   register_code (KC_LALT);
+// }
+
+// void unregister_alt_shift (void) {
+//   unregister_code (KC_LSFT);
+//   unregister_code (KC_LALT);
+// }
 
 typedef enum {
     TD_NONE,
@@ -155,44 +515,6 @@ void td11_reset (qk_tap_dance_state_t *state, void *user_data);
 
 // void td12_finished (qk_tap_dance_state_t *state, void *user_data);
 // void td12_reset (qk_tap_dance_state_t *state, void *user_data);
-
-
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-	[_HOME] = LAYOUT(
-    LT(_FN4, KC_GRV),TD(TD_1),     TD(TD_2), TD(TD_3), TD(TD_4), TD(TD_5),                               TD(TD_6),  TD(TD_7), TD(TD_8),TD(TD_9),TD(TD_10),       TD(TD_11),
-    C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,          C_S_T(KC_LBRC),
-    LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    TD(TD_SCLN),   RCTL_T(KC_QUOT),
-    OSM(MOD_LSFT),   LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
-                     KC_LGUI,      KC_TRNS,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_FN4, KC_ENT), KC_BSLS),
-
-	[_GAME] = LAYOUT(
-    KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,      KC_5,                            DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,      KC_T,                            KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
-    KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,      KC_G,                            KC_H,     KC_J,    KC_K,    KC_L,    TD(TD_SCLN),    KC_QUOT,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,      KC_B,   KC_MUTE,      TG(_GAME), KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_BSPC,
-                      KC_F9, KC_BSPC, KC_LALT,   MO(_FN4), KC_SPC,         KC_ENT,  LT(_NAV,KC_BSPC), KC_RCTL, EH_LEFT, EH_RGHT),
-
-	[_NUM] = LAYOUT(
-    KC_TRNS, KC_F1,   KC_F2,   KC_F3,   KC_F4,    KC_F5,                              KC_F6,   KC_F7, KC_F8,   KC_F9,  KC_F10,  KC_F11,
-    KC_CAPS, M_ARROW, KC_GT,   KC_RBRC, KC_RPRN,  KC_RCBR,                            KC_PCMM, KC_P7, KC_P8,   KC_P9,  KC_PAST, KC_F12,
-    DM_RSTP, M_SLCT,  KC_LT,   KC_LBRC, KC_LPRN,  KC_LCBR,                            KC_PDOT, KC_P4, KC_P5,   KC_P6,  KC_P0, KC_PPLS,
-    DM_REC1, DM_PLY1, A(KC_X), A(KC_C), A( KC_V), A(KC_B), KC_SLEP,         TG(_GAME),KC_TRNS, KC_P1, KC_P2,   KC_P3,  KC_PSLS, KC_PENT,
-                      KC_LOCK, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,         KC_TRNS,  KC_P0,   KC_PMNS, KC_TRNS, KC_TRNS),
-
-	[_NAV] = LAYOUT(
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                             G(KC_1),    G(KC_2),    G(KC_3),    G(KC_4),    G(KC_5), G(KC_6),
-    KC_TRNS, KC_PSCR, KC_BTN1, KC_MS_U, KC_TRNS, KC_TRNS,                             KC_DEL,     KC_HOME,    KC_END,     KC_TRNS,    KC_INS,  KC_PGUP,
-    KC_TRNS, KC_BTN2, KC_MS_L, KC_MS_D, KC_MS_R, KC_TRNS,                             KC_LEFT,    KC_DOWN,    KC_UP,      KC_RGHT,    KC_ENT,  KC_PGDN,
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PWR,            KC_TRNS, M_SLSHR,    C(KC_LEFT), C(KC_RGHT), M_SLEXT,    M_SLCT, M_AF4,
-                      KC_TRNS, KC_TRNS, KC_ACL0, KC_ACL0, KC_ACL0,           KC_NO,   KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS),
-
-	[_FN4] = LAYOUT(
-    KC_NO,    KC_NO, KC_NO,   KC_NO,   KC_NO,   KC_NO,                             KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
-    RESET,    KC_NO, DF(0),   DF(1),   CG_TOGG, TG(_FN4),                          KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, KC_NO,
-    TG(_FN4), KC_NO, KC_NO,   KC_TRNS, KC_TRNS, KC_TRNS,                           KC_NO,   KC_MPRV, KC_MPLY, KC_MNXT, KC_NO, KC_NO,
-    KC_NO,    KC_NO, KC_NO,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,        TG(_FN4), KC_NO,   KC_VOLD, KC_MUTE, KC_VOLU, KC_NO, KC_NO,
-                     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,        KC_TRNS,  KC_TRNS, KC_TRNS, MO(_FN4), KC_TRNS)
-};
 
 
 td_state_t cur_dance(qk_tap_dance_state_t *state) {
@@ -616,342 +938,3 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_11] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td11_finished, td11_reset),
     // [TD_12] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td12_finished, td12_reset),
 };
-
-bool encoder_update_user(uint8_t index, bool clockwise) {
-// --------------- ЛЕВАЯ КРУТИЛКА ------------------
-    if (index == 0) {
-// --------------- layer 4------------------
-        if (IS_LAYER_ON(_FN4)) {
-            if (clockwise) {
-                tap_code16(A(KC_TAB));
-            } else {
-                tap_code16(LALT(KC_TAB));
-            }
-// --------------- NAV------------------
-    } else if (IS_LAYER_ON(_NAV)) {
-            if (clockwise) {
-                tap_code16(KC_VOLU);
-            } else {
-                tap_code16(KC_VOLD);
-            }
-// --------------- NUM------------------
-    } else if (IS_LAYER_ON(_NUM)) {
-            if (clockwise) {
-                if (get_mods() & MOD_BIT(KC_RALT)) {
-                    unregister_mods(MOD_RALT);
-                    tap_code16(C(G(KC_RIGHT)));        // на правый рабочий стол (зажать func+alt)
-                    register_mods(MOD_RALT);
-                } else {
-                    SEND_STRING(SS_LCTL("ax"));         // вырезание с выделением всего
-                }
-            } else {
-                if (get_mods() & MOD_BIT(KC_RALT)) {
-                    unregister_mods(MOD_RALT);
-                    tap_code16(C(G(KC_LEFT)));        // на левый рабочий стол (зажать func+alt)
-                    register_mods(MOD_RALT);
-                } else {
-                    SEND_STRING(SS_LCTL("ac"));         //копирование с выделением всего
-                }
-            }
-// --------------- GAME------------------
-    } else if (IS_LAYER_ON(_GAME)) {
-            if (clockwise) {
-                tap_code16(KC_F9);
-            } else {
-                tap_code16(KC_F5);
-            }
-// --------------- HOME LAYER------------------
-    } else  if (clockwise) {
-                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
-                    unregister_mods(MOD_LSFT);
-                    tap_code16(C(KC_Y));         //отмена вперед
-                    register_mods(MOD_LSFT);
-                } else if (get_mods() & MOD_BIT(KC_LALT)) {
-                    tap_code16(C(A(KC_RIGHT)));         // переместить вкладку вс кода в правую группу
-                } else if (get_mods() & MOD_BIT(KC_RALT)) {
-                    tap_code16(C(KC_P5));         // на правую панель вс код
-                } else if (get_mods() & MOD_BIT(KC_RCTL)) {
-                    unregister_mods(MOD_RCTL);
-                    tap_code16(G(S(KC_RIGHT)));         // переместить окно на другой монитор
-                    tap_code16(KC_RCTL);
-                }
-                else {
-                    tap_code16(C(KC_V));        //вставка
-                }
-            } else {
-                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
-                    unregister_mods(MOD_LSFT);
-                    tap_code16(C(KC_Z));        //отмена назад
-                    register_mods(MOD_LSFT);
-                } else if (get_mods() & MOD_BIT(KC_LALT)) {
-                    tap_code16(C(A(KC_LEFT)));         // переместить вкладку вс кода в левую группу
-                } else if (get_mods() & MOD_BIT(KC_RALT)) {
-                    tap_code16(C(KC_P4));         // на левую панель вс код
-                } else if (get_mods() & MOD_BIT(KC_RCTL)) {
-                    unregister_mods(MOD_RCTL);
-                    tap_code16(G(S(KC_LEFT)));         // переместить окно на другой монитор
-                    tap_code16(KC_RCTL);
-                }
-                else {
-                    tap_code16(C(KC_C));         //копирование
-                }
-          }
-
-// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         case M_ARROW:
-//         if (record->event.pressed) {
-//             // when keycode QMKBEST is pressed
-//             SEND_STRING("=>");
-//         } else {
-//             // when keycode QMKBEST is released
-//         }
-//         break;
-//     }
-// }
-
-// --------------- ПРАВАЯ КРУТИЛКА ------------------
-} else if (index == 1) {
-    if (IS_LAYER_ON(_FN4)) {
-            if (clockwise) {
-                tap_code16(C(KC_PGDOWN));
-            }
-            else {
-                tap_code16(C(KC_PGUP));
-            }
-// --------------- NAV------------------
-    } else if (IS_LAYER_ON(_NAV)) {
-            if (clockwise) {
-                tap_code16(KC_VOLU);    // громче
-                tap_code16(KC_VOLU);    // громче
-                tap_code16(KC_VOLU);    // громче
-            }
-            else {
-                tap_code16(KC_VOLD);    // тише
-                tap_code16(KC_VOLD);    // тише
-                tap_code16(KC_VOLD);    // тише
-            }
-// --------------- NUM------------------
-    } else if (IS_LAYER_ON(_NUM)) {
-            if (clockwise) {
-                tap_code16(A(KC_RIGHT));    // навигация по альт + стрелка
-            }
-            else {
-                tap_code16(A(KC_LEFT));     // навигация по альт + стрелка
-            }
-// --------------- GAME------------------
-
-    } else if (IS_LAYER_ON(_GAME)) {
-            if (clockwise) {
-                tap_code16(KC_VOLU);
-            }
-            else {
-                tap_code16(KC_VOLD);
-            }
-// --------------- home layer------------------
-    } else {
-            if (clockwise) {
-                tap_code16(C(KC_PGDOWN));       //переключение внутренних вкладок вперед
-            }
-            else {
-                tap_code16(C(KC_PGUP));         //переключение внутренних вкладок назад
-            }
-    }
-
-}
-    return true;
-}
-
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-    case M_SLEXT:
-        if (record->event.pressed) {
-            SEND_STRING(SS_DOWN(X_LALT) SS_DOWN(X_LSFT) SS_TAP(X_RIGHT) SS_UP(X_LSFT) SS_UP(X_LALT));
-        }
-        break;
-    case M_SLSHR:
-        if (record->event.pressed) {
-            SEND_STRING(SS_DOWN(X_LALT) SS_DOWN(X_LSFT) SS_TAP(X_LEFT) SS_UP(X_LSFT) SS_UP(X_LALT));
-        }
-        break;
-        case KC_BSPC: {
-            if (record->event.pressed) {
-                if (get_mods() & MOD_MASK_SHIFT) {
-                    unregister_code(KC_LSFT);
-                    SEND_STRING(SS_TAP(X_DEL));
-                    register_code(KC_LSFT);
-                } else {
-
-                }
-            } else {
-
-            }
-            return false;
-            break;
-        }    case M_ARROW:
-        if (record->event.pressed) {
-            // when keycode QMKBEST is pressed
-            SEND_STRING("=>");
-        } else {
-            // when keycode QMKBEST is released
-        }
-        break;
-    case M_SLCT:
-        if (record->event.pressed) {
-            // when keycode QMKURL is pressed
-            SEND_STRING(SS_DOWN(X_LCTL) SS_TAP(X_LEFT) SS_UP(X_LCTL) SS_DOWN(X_LSFT) SS_DOWN(X_LCTL) SS_TAP(X_RIGHT) SS_UP(X_LCTL) SS_UP(X_LSFT));
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_AF4:
-            if (record->event.pressed) {
-            // when keycode is pressed
-            SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_F4) SS_UP(X_LALT));
-        } else {
-            // when keycode is released
-
-        }
-        break;
-
-            // register_code16(KC_LALT);
-            // register_code16(KC_F4);
-
-            // SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_F4) SS_DELAY(5000) SS_UP(X_LALT));
-    case M_1:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_1);
-            } else {
-                tap_code16(KC_EXLM);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_2:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_2);
-            } else {
-                tap_code16(KC_AT);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_3:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_3);
-            } else {
-                tap_code16(KC_HASH);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_4:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_4);
-            } else {
-                tap_code16(KC_DOLLAR);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_5:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_5);
-            } else {
-                tap_code16(KC_PERCENT);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_6:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_6);
-            } else {
-                tap_code16(KC_CIRCUMFLEX);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_7:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_7);
-            } else {
-                tap_code16(KC_AMPERSAND);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    case M_8:
-        if (record->event.pressed) {
-            if (get_mods() & MOD_MASK_SHIFT) {
-                unregister_mods(MOD_MASK_SHIFT);
-                tap_code16(KC_8);
-            } else {
-                tap_code16(KC_ASTERISK);
-            }
-        } else {
-            // when keycode QMKURL is released
-        }
-        break;
-    }
-    return true;
-};
-
-
-
-
-
-
-
-
-// void register_ctrl_shift (void) {
-//   register_code (KC_LSFT);
-//   register_code (KC_LCTRL);
-// }
-
-// void unregister_ctrl_shift (void) {
-//   unregister_code (KC_LSFT);
-//   unregister_code (KC_LCTRL);
-// }
-
-// void register_ctrl_alt (void) {
-//   register_code (KC_LALT);
-//   register_code (KC_LCTRL);
-// }
-
-// void unregister_ctrl_alt (void) {
-//   unregister_code (KC_LALT);
-//   unregister_code (KC_LCTRL);
-// }
-
-// void register_alt_shift (void) {
-//   register_code (KC_LSFT);
-//   register_code (KC_LALT);
-// }
-
-// void unregister_alt_shift (void) {
-//   unregister_code (KC_LSFT);
-//   unregister_code (KC_LALT);
-// }
