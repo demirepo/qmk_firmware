@@ -81,7 +81,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case OSM(MOD_LSFT):
             return 200;
         case KTD_SCLN:
-            return 200;
+            return 150;
         case KTD_1:
             return 200;
         case KTD_2:
