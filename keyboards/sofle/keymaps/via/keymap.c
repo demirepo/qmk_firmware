@@ -33,6 +33,7 @@ enum custom_keycodes {          // макросы
     M_PW2,
     M_SLCT,
     M_AF4,
+    M_CACX,
     M_1,
     M_2,
     M_3,
@@ -41,8 +42,8 @@ enum custom_keycodes {          // макросы
     M_6,
     M_7,
     M_8,
-    M_SLEXT,
-    M_SLSHR,
+    M_INC,
+    M_DEC,
     LEFT_CW_HOME,
     LEFT_CCW_HOME,
     LEFT_TAP,
@@ -71,6 +72,10 @@ enum {              // Tap dance enums
 // Произвольные длительности нажатий, чтобы успевать кликать дважды
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case KC_WH_U:
+            return 10;
+        case KC_WH_D:
+            return 10;
         case M_AF4:
             return 500;
         case OSM(MOD_LSFT):
@@ -124,23 +129,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       KC_F9, KC_BSPC, KC_LALT, MO(_FN4), KC_SPC,         KC_ENT,  LT(_NAV,KC_BSPC), KC_RCTL, EH_LEFT, EH_RGHT),
 
 	[_NUM] = LAYOUT(
-    _______,    KC_F1,   KC_F2,   KC_F3,   KC_F4,    KC_F5,                              KC_F6,   KC_F7, KC_F8,   KC_F9,  KC_F10,  KC_F11,
+    KC_PSCR,    KC_F1,   KC_2,   KC_F3,   KC_F4,    KC_F5,                              KC_F6,   KC_F7, KC_F8,   KC_F9,  KC_F10,  KC_F11,
     KC_CAPS, M_ARROW, KC_GT,   KC_RBRC, KC_RPRN,  KC_RCBR,                            KC_PCMM, KC_P7, KC_P8,   KC_P9,  KC_PAST, KC_F12,
     DM_RSTP, M_SLCT,  KC_LT,   KC_LBRC, KC_LPRN,  KC_LCBR,                            KC_PDOT, KC_P4, KC_P5,   KC_P6,  KC_P0,   KC_PPLS,
-    DM_REC1, DM_PLY1, A(KC_X), A(KC_C), A( KC_V), A(KC_B), KC_SLEP,         TG(_GAME),_______, KC_P1, KC_P2,   KC_P3,  KC_PSLS, KC_PENT,
+    DM_REC1, DM_PLY1, A(KC_X), A(KC_C), A( KC_V), A(KC_B), M_CACX,         TG(_GAME), _______, KC_P1, KC_P2,   KC_P3,  KC_PSLS, KC_PENT,
                       KC_LOCK, _______, _______,  _______, _______,         _______,  C(KC_DEL),   KC_PMNS, _______, _______),
 
 	[_NAV] = LAYOUT(
-    _______, _______, _______, _______, _______, _______,                             G(KC_1),    G(KC_2),    G(KC_3),    G(KC_4),    G(KC_5), G(KC_6),
-    _______, KC_PSCR, KC_BTN1, KC_MS_U, _______, _______,                             KC_DEL,     KC_HOME,    KC_END,     _______,    KC_INS,  KC_PGUP,
-    _______, KC_BTN2, KC_MS_L, KC_MS_D, KC_MS_R, _______,                             KC_LEFT,    KC_DOWN,    KC_UP,      KC_RGHT,    KC_ENT,  KC_PGDN,
-    _______, _______, _______, _______, _______, _______, KC_PWR,            _______, M_SLSHR,    C(KC_LEFT), C(KC_RGHT), M_SLEXT,    M_SLCT,  M_AF4,
+    _______, _______, _______, _______, _______, _______,                               G(KC_1),    G(KC_2),    G(KC_3),    G(KC_4),    G(KC_5), G(KC_6),
+    _______, _______, KC_BTN1, KC_MS_U, _______, KC_WH_U,                               KC_DEL,     KC_HOME,    KC_END,     _______,    KC_INS,  KC_PGUP,
+    _______, KC_BTN2, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D,                               KC_LEFT,    KC_DOWN,    KC_UP,      KC_RGHT,    KC_ENT,  KC_PGDN,
+    _______, _______, _______, _______, _______, _______,   _______,           _______, M_DEC,    C(KC_LEFT), C(KC_RGHT), M_INC,    M_SLCT,  M_AF4,
                       _______, _______, KC_ACL0, C(KC_DEL), KC_ACL0,           _______, _______,    _______,    _______,    _______),
 
 	[_FN4] = LAYOUT(
-    _______,  G(S(KC_F)), _______,   _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
-    RESET,    _______,    DF(0),     DF(1),   CG_TOGG, TG(_FN4),                          _______, _______, _______, _______, _______, _______,
-    TG(_FN4), _______,    _______,   M_PW2,   M_PW1,   _______,                           _______, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
+    _______,  G(S(KC_F)), _______,   _______, _______, _______,                           _______, _______, _______, _______, KC_PWR,  KC_SLEP,
+    RESET,    _______,    _______,   _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
+    _______,  _______,    _______,   M_PW1,   M_PW2,   _______,                           _______, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
     _______,  _______,    _______,   _______, _______, _______, _______,        TG(_FN4), _______, KC_VOLD, KC_MUTE, KC_VOLU, _______, _______,
                           _______,   _______, _______, _______, _______,        _______,  _______, _______, MO(_FN4), _______)
 };
@@ -160,9 +165,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 // --------------- NAV------------------
     } else if (IS_LAYER_ON(_NAV)) {
             if (clockwise) {
-                tap_code16(KC_VOLU);
+                clear_mods();
+                tap_code16(A(S(KC_RIGHT)));
+                clear_mods();
             } else {
-                tap_code16(KC_VOLD);
+                clear_mods();
+                tap_code16(A(S(KC_LEFT)));
+                clear_mods();
             }
 // --------------- NUM------------------
     } else if (IS_LAYER_ON(_NUM)) {
@@ -170,7 +179,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 if (get_mods() & MOD_BIT(KC_RALT)) {
                 // Здесь мог бы быть ваш keycode
                 } else {
-                    SEND_STRING(SS_LCTL("ax"));         // вырезание с выделением всего
+                    SEND_STRING(SS_LCTL("av"));         // вставка с выделением всего
                 }
             } else {
                 if (get_mods() & MOD_BIT(KC_RALT)) {
@@ -306,7 +315,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     clear_mods();
                     tap_code16(KC_LSHIFT);
                     tap_code16(A(KC_SPC));
-                    SEND_STRING("n");
+                    SEND_STRING("r");
                     // tap_code16(KC_N);
                 } else if (get_mods() & MOD_BIT(KC_LGUI)) {
                     tap_code16(C(KC_LEFT));                             // на левый рабочий стол
@@ -346,24 +355,33 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     //     }
     //     return false;
         // break;
-    case M_SLEXT:
+    case M_INC:
         if (record->event.pressed) {
-            SEND_STRING(SS_DOWN(X_LALT) SS_DOWN(X_LSFT) SS_TAP(X_RIGHT) SS_UP(X_LSFT) SS_UP(X_LALT));
+            tap_code16(C(S(A(G(KC_UP)))));
+        }
+        break;
+    case M_DEC:
+        if (record->event.pressed) {
+            tap_code16(C(S(A(G(KC_DOWN)))));
+        }
+        break;
+    case M_CACX:
+        if (record->event.pressed) {
+            SEND_STRING(SS_LCTL("ax"));         // вырезание с выделением всего
         }
         break;
     case M_PW1:
+        tap_code16(KC_LSFT);
         if (record->event.pressed) {
             SEND_STRING(PW1);
         }
         break;
     case M_PW2:
+        tap_code16(KC_LSFT);
         if (record->event.pressed) {
             SEND_STRING(PW2);
-        }
-        break;
-    case M_SLSHR:
-        if (record->event.pressed) {
-            SEND_STRING(SS_DOWN(X_LALT) SS_DOWN(X_LSFT) SS_TAP(X_LEFT) SS_UP(X_LSFT) SS_UP(X_LALT));
+            tap_code16(C(KC_LEFT));
+            tap_code16(KC_RIGHT);
         }
         break;
         case M_ARROW:
@@ -522,11 +540,13 @@ typedef struct {
     td_state_t state;
 } td_tap_t;
 
-td_state_t cur_dance(qk_tap_dance_state_t *state);
 td_state_t hold_cur_dance (qk_tap_dance_state_t *state);
 
 void register_hyper (void);
 void unregister_hyper (void);
+
+void SCLN_finished (qk_tap_dance_state_t *state, void *user_data);
+void SCLN_reset (qk_tap_dance_state_t *state, void *user_data);
 
 void td1_finished (qk_tap_dance_state_t *state, void *user_data);
 void td1_reset (qk_tap_dance_state_t *state, void *user_data);
@@ -565,28 +585,28 @@ void td11_reset (qk_tap_dance_state_t *state, void *user_data);
 // void td12_reset (qk_tap_dance_state_t *state, void *user_data);
 
 
-td_state_t cur_dance(qk_tap_dance_state_t *state) {
-    if (state->count == 1) {
-        if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
-        // Key has not been interrupted, but the key is still held. Means you want to send a 'HOLD'.
-        else return TD_SINGLE_HOLD;
-    } else if (state->count == 2) {
-        // TD_DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
-        // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
-        // keystrokes of the key, and not the 'double tap' action/macro.
-        if (state->interrupted) return TD_DOUBLE_SINGLE_TAP;
-        else if (state->pressed) return TD_DOUBLE_HOLD;
-        else return TD_DOUBLE_TAP;
-    }
+// td_state_t cur_dance(qk_tap_dance_state_t *state) {
+//     if (state->count == 1) {
+//         if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
+//         // Key has not been interrupted, but the key is still held. Means you want to send a 'HOLD'.
+//         else return TD_SINGLE_HOLD;
+//     } else if (state->count == 2) {
+//         // TD_DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
+//         // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
+//         // keystrokes of the key, and not the 'double tap' action/macro.
+//         if (state->interrupted) return TD_DOUBLE_SINGLE_TAP;
+//         else if (state->pressed) return TD_DOUBLE_HOLD;
+//         else return TD_DOUBLE_TAP;
+//     }
 
-    // Assumes no one is trying to type the same letter three times (at least not quickly).
-    // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
-    // an exception here to return a 'TD_TRIPLE_SINGLE_TAP', and define that enum just like 'TD_DOUBLE_SINGLE_TAP'
-    if (state->count == 3) {
-        if (state->interrupted || !state->pressed) return TD_TRIPLE_TAP;
-        else return TD_TRIPLE_HOLD;
-    } else return TD_UNKNOWN;
-}
+//     // Assumes no one is trying to type the same letter three times (at least not quickly).
+//     // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+//     // an exception here to return a 'TD_TRIPLE_SINGLE_TAP', and define that enum just like 'TD_DOUBLE_SINGLE_TAP'
+//     if (state->count == 3) {
+//         if (state->interrupted || !state->pressed) return TD_TRIPLE_TAP;
+//         else return TD_TRIPLE_HOLD;
+//     } else return TD_UNKNOWN;
+// }
 
 td_state_t hold_cur_dance (qk_tap_dance_state_t *state) {
   if (state->count == 1) {
@@ -625,6 +645,10 @@ void unregister_hyper (void) { //Helper function to invoke Hyper
   unregister_code16 (KC_LGUI);
 }
 
+static td_tap_t SCLN_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
 static td_tap_t td1_state = {
     .is_press_action = true,
     .state = TD_NONE
@@ -674,6 +698,30 @@ static td_tap_t td11_state = {
 //     .state = TD_NONE
 // };
 
+void SCLN_finished (qk_tap_dance_state_t *state, void *user_data) {
+  SCLN_state.state = hold_cur_dance(state);
+  switch (SCLN_state.state) {
+    case TD_SINGLE_TAP: register_code16(KC_SCLN); break;
+    case TD_SINGLE_HOLD: register_code16(KC_ESC); break;
+    case TD_DOUBLE_HOLD: register_code16(KC_ESC); break;
+    case TD_DOUBLE_TAP: register_code16(KC_ENT); break;
+    // case TD_TRIPLE_TAP: register_code16(KC_LSHIFT); register_code16(KC_F1); break;
+    // case TD_TRIPLE_HOLD: register_hyper(); register_code16(KC_F1); break;
+    default: break;
+  }
+}
+void SCLN_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (SCLN_state.state) {
+    case TD_SINGLE_TAP: unregister_code16(KC_SCLN); break;
+    case TD_SINGLE_HOLD: unregister_code16(KC_ESC); break;
+    case TD_DOUBLE_HOLD: unregister_code16(KC_ESC); break;
+    case TD_DOUBLE_TAP: unregister_code16(KC_ENT); break;
+    // case TD_TRIPLE_TAP: unregister_code16(KC_LSHIFT); unregister_code16(KC_F1); break;
+    // case TD_TRIPLE_HOLD: unregister_hyper(); unregister_code16(KC_F1); break;
+    default: break;
+  }
+  SCLN_state.state = TD_NONE;
+}
 void td1_finished (qk_tap_dance_state_t *state, void *user_data) {
   td1_state.state = hold_cur_dance(state);
   switch (td1_state.state) {
@@ -972,7 +1020,7 @@ void td11_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 // Tap Dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_SCLN] = ACTION_TAP_DANCE_DOUBLE(KC_SCOLON, KC_ENTER),
+    [TD_SCLN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, SCLN_finished, SCLN_reset),
     [TD_1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td1_finished, td1_reset),
     [TD_2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td2_finished, td2_reset),
     [TD_3] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td3_finished, td3_reset),
