@@ -22,7 +22,7 @@
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
 // --------------- layer 4------------------
-    if (IS_LAYER_ON(_FN4)) {
+    if (IS_LAYER_ON(_GPLUS)) {
         if (index == 0) {
             if (clockwise) {
                 tap_code16(LALT(KC_TAB));

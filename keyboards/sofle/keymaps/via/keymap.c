@@ -24,7 +24,8 @@ enum layer_names {
   _GAME,
   _NUM,
   _NAV,
-  _FN4
+  _GPLUS,
+  _EXTRA
 };
 
 enum custom_keycodes {          // макросы
@@ -46,10 +47,10 @@ enum custom_keycodes {          // макросы
     M_DEC,
     LEFT_CW_HOME,
     LEFT_CCW_HOME,
-    LEFT_TAP,
+    LT_NUM,
     RIGHT_CW,
     RIGHT_CCW,
-    RIGHT_TAP,
+    RT_NUM,
 };
 
 // ==========================Тап дэнс секция==============================
@@ -81,7 +82,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case OSM(MOD_LSFT):
             return 200;
         case KTD_SCLN:
-            return 150;
+            return 180;
         case KTD_1:
             return 200;
         case KTD_2:
@@ -115,18 +116,18 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_HOME] = LAYOUT(
-    LT(_FN4, KC_GRV),KTD_1,        KTD_2,    KTD_3,    KTD_4,    KTD_5,                                     KTD_6,   KTD_7,   KTD_8,   KTD_9,   KTD_10,     KTD_11,
+    LT(_GPLUS, KC_GRV),KTD_1,        KTD_2,    KTD_3,    KTD_4,    KTD_5,                                     KTD_6,   KTD_7,   KTD_8,   KTD_9,   KTD_10,     KTD_11,
     C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       C_S_T(KC_LBRC),
     LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    KTD_SCLN,   RCTL_T(KC_QUOT),
     KC_LSFT,         LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
-                     KC_LGUI,      _______,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_FN4, KC_ENT), KC_BSLS),
+                     KC_LGUI,      _______,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_EXTRA, KC_ENT), KC_BSLS),
 
 	[_GAME] = LAYOUT(
     KC_ESC,  KC_1,    KC_2,  KC_3,    KC_4,    KC_5,                              DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
     KC_TAB,  KC_Q,    KC_W,  KC_E,    KC_R,    KC_T,                              KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
-    KC_LCTL, KC_A,    KC_S,  KC_D,    KC_F,    KC_G,                              KC_H,     KC_J,    KC_K,    KC_L,    KTD_SCLN,    KC_QUOT,
+    KC_LCTL, KC_A,    KC_S,  KC_D,    KC_F,    KC_G,                              KC_H,     KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,  KC_C,    KC_V,    KC_B,     KC_MUTE,      TG(_GAME), KC_N,     KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_BSPC,
-                      KC_F9, KC_BSPC, KC_LALT, MO(_FN4), KC_SPC,         KC_ENT,  LT(_NAV,KC_BSPC), KC_RCTL, EH_LEFT, EH_RGHT),
+                      KC_F9, KC_BSPC, KC_LALT, MO(_GPLUS), KC_SPC,         KC_ENT,  LT(_NAV,KC_BSPC), KC_RALT, KC_RGUI, KC_BSLS),
 
 	[_NUM] = LAYOUT(
     KC_PSCR,    KC_F1,   KC_2,   KC_F3,   KC_F4,    KC_F5,                              KC_F6,   KC_F7, KC_F8,   KC_F9,  KC_F10,  KC_F11,
@@ -136,18 +137,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       KC_LOCK, _______, _______,  _______, _______,         _______,  C(KC_DEL),   KC_PMNS, _______, _______),
 
 	[_NAV] = LAYOUT(
-    _______, _______, _______, _______, _______, _______,                               G(KC_1),    G(KC_2),    G(KC_3),    G(KC_4),    G(KC_5), G(KC_6),
-    _______, _______, KC_BTN1, KC_MS_U, _______, KC_WH_U,                               KC_DEL,     KC_HOME,    KC_END,     _______,    KC_INS,  KC_PGUP,
-    _______, KC_BTN2, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D,                               KC_LEFT,    KC_DOWN,    KC_UP,      KC_RGHT,    KC_ENT,  KC_PGDN,
-    _______, _______, _______, _______, _______, _______,   _______,           _______, M_DEC,    C(KC_LEFT), C(KC_RGHT), M_INC,    M_SLCT,  M_AF4,
+    _______, _______, _______, _______, _______, _______,                               G(KC_1),    G(KC_2),    G(KC_3),    G(KC_4), G(KC_5), G(KC_6),
+    _______, _______, KC_BTN1, KC_MS_U, _______, KC_WH_U,                               KC_DEL,     KC_HOME,    KC_END,     _______, KC_INS,  KC_PGUP,
+    _______, KC_BTN2, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D,                               KC_LEFT,    KC_DOWN,    KC_UP,      KC_RGHT, KC_ENT,  KC_PGDN,
+    _______, _______, _______, _______, _______, _______,   _______,           _______, M_DEC,      C(KC_LEFT), C(KC_RGHT), M_INC,   M_SLCT,  M_AF4,
                       _______, _______, KC_ACL0, C(KC_DEL), KC_ACL0,           _______, _______,    _______,    _______,    _______),
 
-	[_FN4] = LAYOUT(
-    _______,  G(S(KC_F)), _______,   _______, _______, _______,                           _______, _______, _______, _______, KC_PWR,  KC_SLEP,
-    RESET,    _______,    _______,   _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
+	[_GPLUS] = LAYOUT(
+    _______,  _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+    _______,  _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+    _______,  _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+    _______,  _______, _______, _______, _______, _______, _______,          _______,  _______, _______, _______, _______, _______, _______,
+                       _______, _______, _______, _______, _______,          _______,  _______, _______, _______, _______),
+
+	[_EXTRA] = LAYOUT(
+    _______,  G(S(KC_F)), _______,   _______, _______, _______,                           _______, _______, _______, _______, KC_PWR, KC_SLEP,
+    _______,  _______,    _______,   _______, _______, _______,                           _______, _______, _______, _______, _______, RESET,
     _______,  _______,    _______,   M_PW1,   M_PW2,   _______,                           _______, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
-    _______,  _______,    _______,   _______, _______, _______, _______,        TG(_FN4), _______, KC_VOLD, KC_MUTE, KC_VOLU, _______, _______,
-                          _______,   _______, _______, _______, _______,        _______,  _______, _______, MO(_FN4), _______)
+    _______,  _______,    _______,   _______, _______, _______, _______,         _______, _______, KC_VOLD, KC_MUTE, KC_VOLU, _______, _______,
+                          _______,   _______, _______, _______, _______,         _______, _______, _______, _______, _______)
 };
 
 
@@ -156,7 +164,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 // --------------- ЛЕВАЯ КРУТИЛКА ------------------
     if (index == 0) {
 // --------------- layer 4------------------
-        if (IS_LAYER_ON(_FN4)) {
+        if (IS_LAYER_ON(_GPLUS)) {
             if (clockwise) {
                 // Здесь мог бы быть ваш keycode
             } else {
@@ -176,16 +184,18 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 // --------------- NUM------------------
     } else if (IS_LAYER_ON(_NUM)) {
             if (clockwise) {
-                if (get_mods() & MOD_BIT(KC_RALT)) {
-                // Здесь мог бы быть ваш keycode
-                } else {
+                if (get_mods() & MOD_BIT(KC_LALT)) {
+                    clear_mods();
                     SEND_STRING(SS_LCTL("av"));         // вставка с выделением всего
+                } else {
+                    tap_code16(C(S(A(G(KC_UP)))));
                 }
             } else {
-                if (get_mods() & MOD_BIT(KC_RALT)) {
-                // Здесь мог бы быть ваш keycode
-                } else {
+                if (get_mods() & MOD_BIT(KC_LALT)) {
+                    clear_mods();
                     SEND_STRING(SS_LCTL("ac"));         //копирование с выделением всего
+                } else {
+                    tap_code16(C(S(A(G(KC_DOWN)))));
                 }
             }
 // --------------- GAME------------------
@@ -210,11 +220,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     tap_code16(C(KC_RIGHT));                    // переместить вкладку вс кода в правую группу
                     // clear_mods();
                 } else if (get_mods() & MOD_BIT(KC_RALT)) {
-                    tap_code16(C(KC_P5));                       //переход на правую панель вс код
+                    tap_code16(C(KC_P6));                       //переход на правую панель вс код
                 } else if (get_mods() & MOD_BIT(KC_RCTL)) {
-                // Здесь мог бы быть ваш keycode
-                    unregister_mods(MOD_RCTL);
-                    tap_code16(G(KC_RIGHT));                    // прибить окно к правой стороне
+                    // Здесь мог бы быть ваш keycode
                 }
                 else {
                     tap_code16(C(KC_V));                         //вставка
@@ -236,9 +244,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 } else if (get_mods() & MOD_BIT(KC_RALT)) {
                     tap_code16(C(KC_P4));                       // переход на левую панель вс код
                 } else if (get_mods() & MOD_BIT(KC_RCTL)) {
-                // Здесь мог бы быть ваш keycode
-                    unregister_mods(MOD_RCTL);
-                    tap_code16(G(KC_LEFT));                    // прибить окно к левой стороне
+                    // Здесь мог бы быть ваш keycode
                 }
                 else {
                     tap_code16(C(KC_C));                        //копирование
@@ -247,7 +253,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 
 // --------------- ПРАВАЯ КРУТИЛКА ------------------
 } else if (index == 1) {
-    if (IS_LAYER_ON(_FN4)) {
+    if (IS_LAYER_ON(_GPLUS)) {
             if (clockwise) {
                 tap_code16(C(KC_PGDOWN));
             }
@@ -257,14 +263,22 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 // --------------- NAV------------------
     } else if (IS_LAYER_ON(_NAV)) {
             if (clockwise) {
-                tap_code16(KC_VOLU);    // громче
-                tap_code16(KC_VOLU);    // громче
-                tap_code16(KC_VOLU);    // громче
-            }
-            else {
-                tap_code16(KC_VOLD);    // тише
-                tap_code16(KC_VOLD);    // тише
-                tap_code16(KC_VOLD);    // тише
+                if (get_mods() & MOD_BIT(KC_RALT)) {
+                    // единичное действие
+                } else {
+                    tap_code16(KC_VOLU);    // громче
+                    tap_code16(KC_VOLU);    // громче
+                    tap_code16(KC_VOLU);    // громче
+                }
+            }   else {
+                if (get_mods() & MOD_BIT(KC_RALT)) {
+                    // единичное действие
+                }
+                else {
+                    tap_code16(KC_VOLD);    // тише
+                    tap_code16(KC_VOLD);    // тише
+                    tap_code16(KC_VOLD);    // тише
+                }
             }
 // --------------- NUM------------------
     } else if (IS_LAYER_ON(_NUM)) {
@@ -292,12 +306,8 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 // Здесь мог бы быть ваш keycode
                 } else if (get_mods() & MOD_BIT(KC_RALT)) {
                 // Здесь мог бы быть ваш keycode
-                } else if (get_mods() & MOD_BIT(KC_LCTL)) {             // развернуть окно
-                    clear_mods();
-                    tap_code16(KC_LSHIFT);
-                    tap_code16(A(KC_SPC));
-                    SEND_STRING("x");
-                    // tap_code16(KC_X);
+                } else if (get_mods() & MOD_BIT(KC_LCTL)) {
+                    // Здесь мог бы быть ваш keycode
                 } else if (get_mods() & MOD_BIT(KC_LGUI)) {
                     tap_code16(C(KC_RIGHT));                            // на правый рабочий стол
                 }
@@ -311,12 +321,8 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 // Здесь мог бы быть ваш keycode
                 } else if (get_mods() & MOD_BIT(KC_RALT)) {
                 // Здесь мог бы быть ваш keycode
-                } else if (get_mods() & MOD_BIT(KC_LCTL)) {             // свернуть окно
-                    clear_mods();
-                    tap_code16(KC_LSHIFT);
-                    tap_code16(A(KC_SPC));
-                    SEND_STRING("r");
-                    // tap_code16(KC_N);
+                } else if (get_mods() & MOD_BIT(KC_LCTL)) {
+                    // Здесь мог бы быть ваш keycode
                 } else if (get_mods() & MOD_BIT(KC_LGUI)) {
                     tap_code16(C(KC_LEFT));                             // на левый рабочий стол
                 }
@@ -355,6 +361,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     //     }
     //     return false;
         // break;
+    case KC_LALT:
+        if (record->event.pressed) {
+            register_code16(KC_LALT);
+        } else {
+            unregister_code16(KC_LALT);
+        }
+        break;
     case M_INC:
         if (record->event.pressed) {
             tap_code16(C(S(A(G(KC_UP)))));
@@ -367,7 +380,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
     case M_CACX:
         if (record->event.pressed) {
-            SEND_STRING(SS_LCTL("ax"));         // вырезание с выделением всего
+            if (get_mods() & MOD_BIT(KC_LALT)) {
+                unregister_code16(KC_LALT);
+                SEND_STRING(SS_LCTL("ax"));         // вырезание с выделением всего
+            } else {
+                // что-то
+            }
         }
         break;
     case M_PW1:
@@ -381,7 +399,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
             SEND_STRING(PW2);
             tap_code16(C(KC_LEFT));
-            tap_code16(KC_RIGHT);
+            tap_code16(KC_LEFT);
         }
         break;
         case M_ARROW:

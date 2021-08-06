@@ -76,7 +76,7 @@ static void print_status_narrow(void) {
             oled_write_P(PSTR("Nav"), false);
             break;
         case 4:
-            oled_write_P(PSTR("_FN4"), false);
+            oled_write_P(PSTR("_GPLUS"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
