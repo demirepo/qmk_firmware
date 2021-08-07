@@ -35,21 +35,9 @@ enum custom_keycodes {          // макросы
     M_SLCT,
     M_AF4,
     M_CACX,
-    M_1,
-    M_2,
-    M_3,
-    M_4,
-    M_5,
-    M_6,
-    M_7,
-    M_8,
     M_INC,
     M_DEC,
-    LEFT_CW_HOME,
-    LEFT_CCW_HOME,
     LT_NUM,
-    RIGHT_CW,
-    RIGHT_CCW,
     RT_NUM,
 };
 
@@ -73,6 +61,8 @@ enum {              // Tap dance enums
 // Произвольные длительности нажатий, чтобы успевать кликать дважды
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case LT(_NAV,KC_BSPC):
+            return 200;
         case KC_WH_U:
             return 10;
         case KC_WH_D:
@@ -113,7 +103,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-
+// Раскладки клавиатуры
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_HOME] = LAYOUT(
     LT(_GPLUS, KC_GRV),KTD_1,        KTD_2,    KTD_3,    KTD_4,    KTD_5,                                     KTD_6,   KTD_7,   KTD_8,   KTD_9,   KTD_10,     KTD_11,
@@ -159,10 +149,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-
+// Энкодер
 bool encoder_update_user(uint8_t index, bool clockwise) {
-// --------------- ЛЕВАЯ КРУТИЛКА ------------------
-    if (index == 0) {
+    if (index == 0) {          // --------------- ЛЕВАЯ КРУТИЛКА ------------------
+
 // --------------- layer 4------------------
         if (IS_LAYER_ON(_GPLUS)) {
             if (clockwise) {
@@ -251,8 +241,8 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 }
           }
 
-// --------------- ПРАВАЯ КРУТИЛКА ------------------
-} else if (index == 1) {
+} else if (index == 1) {       // --------------- ПРАВАЯ КРУТИЛКА ------------------
+
     if (IS_LAYER_ON(_GPLUS)) {
             if (clockwise) {
                 tap_code16(C(KC_PGDOWN));
@@ -300,14 +290,18 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 // --------------- HOME LAYER RIGHT ------------------
     } else if (IS_LAYER_ON(_HOME)) {
             if (clockwise) {
-                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
-                // Здесь мог бы быть ваш keycode
-                } else if (get_mods() & MOD_BIT(KC_LALT)) {
-                // Здесь мог бы быть ваш keycode
+                if (get_mods() & MOD_BIT(KC_LSHIFT)) {                  // развернуть область рекурсивно
+                    unregister_code16(KC_LSHIFT);
+                    tap_code16(C(KC_K));
+                    tap_code16(C(S(KC_LBRC)));
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {             // развернуть все области
+                    unregister_code16(KC_LALT);
+                    tap_code16(C(KC_K));
+                    tap_code16(C(KC_J));
+                } else if (get_mods() & MOD_BIT(KC_LCTL)) {
+                    tap_code16(S(KC_LBRC));                             // развернуть область
                 } else if (get_mods() & MOD_BIT(KC_RALT)) {
                 // Здесь мог бы быть ваш keycode
-                } else if (get_mods() & MOD_BIT(KC_LCTL)) {
-                    // Здесь мог бы быть ваш keycode
                 } else if (get_mods() & MOD_BIT(KC_LGUI)) {
                     tap_code16(C(KC_RIGHT));                            // на правый рабочий стол
                 }
@@ -315,14 +309,18 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     tap_code16(C(KC_PGDN));
                 }
             } else {
-                if (get_mods() & MOD_BIT(KC_LSHIFT)) {
-                // Здесь мог бы быть ваш keycode
-                } else if (get_mods() & MOD_BIT(KC_LALT)) {
-                // Здесь мог бы быть ваш keycode
+                if (get_mods() & MOD_BIT(KC_LSHIFT)) {                  // развернуть область рекурсивно
+                    unregister_code16(KC_LSHIFT);
+                    tap_code16(C(KC_K));
+                    tap_code16(C(S(KC_RBRC)));
+                } else if (get_mods() & MOD_BIT(KC_LALT)) {             // свернуть все области
+                    unregister_code16(KC_LALT);
+                    tap_code16(C(KC_K));
+                    tap_code16(C(KC_P8));
                 } else if (get_mods() & MOD_BIT(KC_RALT)) {
                 // Здесь мог бы быть ваш keycode
                 } else if (get_mods() & MOD_BIT(KC_LCTL)) {
-                    // Здесь мог бы быть ваш keycode
+                    tap_code16(S(KC_RBRC));                             // свернуть область
                 } else if (get_mods() & MOD_BIT(KC_LGUI)) {
                     tap_code16(C(KC_LEFT));                             // на левый рабочий стол
                 }
@@ -334,7 +332,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 }
     return true;
 }
-
+// Реакции кастомных кодов
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     // case LSFT_T(KC_BSPC):
