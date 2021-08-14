@@ -46,6 +46,7 @@ enum custom_keycodes {          // макросы
 
 // ==========================Тап дэнс секция==============================
 enum {              // Tap dance enums
+    TD_CLOS,
     TD_SCLN,
     TD_1,
     TD_2,
@@ -127,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       C_S_T(KC_LBRC),
     LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    KTD_SCLN,   RCTL_T(KC_QUOT),
     KC_LSFT,         LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,            C(KC_X),                KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH),KC_RSFT,
-                     KC_LGUI,      _______,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_EXTRA, KC_ENT), KC_BSLS),
+                     _______,      KC_LGUI,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),  LT(_NUM, KC_SPC),   LT(_NAV,KC_BSPC), KC_RALT, LT(_EXTRA, KC_ENT), KC_BSLS),
 
 	[_GAME] = LAYOUT(
     KC_ESC,  KC_1,    KC_2,  KC_3,    KC_4,    KC_5,                              DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
@@ -470,6 +471,9 @@ td_state_t hold_cur_dance (qk_tap_dance_state_t *state);
 void register_hyper (void);
 void unregister_hyper (void);
 
+void CLOS_finished (qk_tap_dance_state_t *state, void *user_data);
+void CLOS_reset (qk_tap_dance_state_t *state, void *user_data);
+
 void SCLN_finished (qk_tap_dance_state_t *state, void *user_data);
 void SCLN_reset (qk_tap_dance_state_t *state, void *user_data);
 
@@ -581,6 +585,11 @@ void unregister_hyper (void) { //Helper function to invoke Hyper
   unregister_code16 (KC_LGUI);
 }
 
+static td_tap_t CLOS_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
+
 static td_tap_t SCLN_state = {
     .is_press_action = true,
     .state = TD_NONE
@@ -633,6 +642,30 @@ static td_tap_t td11_state = {
 //     .is_press_action = true,
 //     .state = TD_NONE
 // };
+void CLOS_finished (qk_tap_dance_state_t *state, void *user_data) {
+  CLOS_state.state = hold_cur_dance(state);
+  switch (CLOS_state.state) {
+    case TD_SINGLE_TAP: register_code16(KC_LCTL); register_code16(KC_F4);  break;
+    case TD_SINGLE_HOLD: register_code16(KC_ESC); break;
+    case TD_DOUBLE_HOLD: register_code16(KC_ESC); break;
+    case TD_DOUBLE_TAP: register_code16(KC_LALT); register_code16(KC_F4);  break;
+    // case TD_TRIPLE_TAP: register_code16(KC_LSHIFT); register_code16(KC_F1); break;
+    // case TD_TRIPLE_HOLD: register_hyper(); register_code16(KC_F1); break;
+    default: break;
+  }
+}
+void CLOS_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (CLOS_state.state) {
+    case TD_SINGLE_TAP: unregister_code16(KC_F4); unregister_code16(KC_LCTL); break;
+    case TD_SINGLE_HOLD: unregister_code16(KC_ESC); break;
+    case TD_DOUBLE_HOLD: unregister_code16(KC_ESC); break;
+    case TD_DOUBLE_TAP: unregister_code16(KC_F4); unregister_code16(KC_LALT); break;
+    // case TD_TRIPLE_TAP: unregister_code16(KC_LSHIFT); unregister_code16(KC_F1); break;
+    // case TD_TRIPLE_HOLD: unregister_hyper(); unregister_code16(KC_F1); break;
+    default: break;
+  }
+  CLOS_state.state = TD_NONE;
+}
 
 void SCLN_finished (qk_tap_dance_state_t *state, void *user_data) {
   SCLN_state.state = hold_cur_dance(state);
@@ -885,6 +918,7 @@ void td9_reset (qk_tap_dance_state_t *state, void *user_data) {
 void td10_finished (qk_tap_dance_state_t *state, void *user_data) {
   td10_state.state = hold_cur_dance(state);
   switch (td10_state.state) {
+    case TD_SINGLE_TAP_SHIFT: register_code16(KC_MINS); break;
     case TD_SINGLE_TAP: register_code16(KC_MINS); break;
     case TD_SINGLE_HOLD: register_code16(KC_F10); break;
     case TD_DOUBLE_HOLD: register_code16(KC_LCTL); register_code16(KC_LALT); register_code16(KC_F10); break;
@@ -896,6 +930,7 @@ void td10_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 void td10_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (td10_state.state) {
+    case TD_SINGLE_TAP_SHIFT: unregister_code16(KC_MINS); break;
     case TD_SINGLE_TAP: unregister_code16(KC_MINS); break;
     case TD_SINGLE_HOLD: unregister_code16(KC_F10); break;
     case TD_DOUBLE_HOLD: register_code16(KC_LCTL); register_code16(KC_LALT); register_code16(KC_F10); break;
@@ -910,6 +945,7 @@ case TD_TRIPLE_HOLD: unregister_hyper(); unregister_code16(KC_F10); break;
 void td11_finished (qk_tap_dance_state_t *state, void *user_data) {
   td11_state.state = hold_cur_dance(state);
   switch (td11_state.state) {
+    case TD_SINGLE_TAP_SHIFT: register_code16(KC_EQL); break;
     case TD_SINGLE_TAP: register_code16(KC_EQL); break;
     case TD_SINGLE_HOLD: register_code16(KC_F11); break;
     case TD_DOUBLE_HOLD: register_code16(KC_LCTL); register_code16(KC_LALT); register_code16(KC_F11); break;
@@ -921,6 +957,7 @@ void td11_finished (qk_tap_dance_state_t *state, void *user_data) {
 }
 void td11_reset (qk_tap_dance_state_t *state, void *user_data) {
   switch (td11_state.state) {
+    case TD_SINGLE_TAP_SHIFT: unregister_code16(KC_EQL); break;
     case TD_SINGLE_TAP: unregister_code16(KC_EQL); break;
     case TD_SINGLE_HOLD: unregister_code16(KC_F11); break;
     case TD_DOUBLE_HOLD: register_code16(KC_LCTL); register_code16(KC_LALT); register_code16(KC_F11); break;
@@ -958,6 +995,7 @@ void td11_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 // Tap Dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_CLOS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, CLOS_finished, CLOS_reset),
     [TD_SCLN] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, SCLN_finished, SCLN_reset),
     [TD_1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td1_finished, td1_reset),
     [TD_2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td2_finished, td2_reset),
