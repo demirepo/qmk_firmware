@@ -82,7 +82,7 @@ for more options.
 //#define DEBUG_MATRIX_SCAN_RATE
 
 #ifdef TAP_DANCE_ENABLE
-    #define KTD_CLOS TD(TD_CLOS)
+    #define KTD_GRV TD(TD_GRV)
     #define KTD_SCLN TD(TD_SCLN)
     #define KTD_1 TD(TD_1)
     #define KTD_2 TD(TD_2)
@@ -98,7 +98,7 @@ for more options.
 #endif
 
 #ifndef TAP_DANCE_ENABLE
-    #define KTD_CLOS M_AF4
+    #define KTD_CLOS LT(_EXTRA, KC_GRV)
     #define KTD_SCLN KC_SCLN
     #define KTD_1 KC_EXLM
     #define KTD_2 KC_AT
