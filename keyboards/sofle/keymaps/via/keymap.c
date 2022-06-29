@@ -134,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     C_S_T(KC_TAB),   KC_Q,         KC_W,     KC_E,     KC_R,     KC_T,                                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,       C_S_T(KC_LBRC),
     LCTL_T(KC_ESC),  KC_A,         KC_S,     KC_D,     KC_F,     KC_G,                                      KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,   RCTL_T(KC_QUOT),
     KC_LSFT,         LCA_T(KC_Z),  KC_X,     KC_C,     KC_V,     KC_B,         C(KC_X),          KC_MPLY,   KC_N,    KC_M,    KC_COMM, KC_DOT, LCA_T(KC_SLSH), KC_RSFT,
-                     M_LDR,        KC_LGUI,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),             LT(_NUM, KC_SPC), LT(_NAV,KC_BSPC), KC_RALT, LT(_EXTRA, KC_ENT), KC_BSLS),
+                     M_LDR,        KC_LGUI,  KC_LALT,  MO(_NUM), LSFT_T(KC_SPC),             LT(_NUM, KC_SPC), LT(_NAV, KC_BSPC), KC_RALT, LT(_EXTRA, KC_APP), KC_BSLS),
 
 	[_GAME] = LAYOUT(
     KTD_11,        KTD_1,   KTD_2, KTD_3,   KTD_4,   KTD_5,                                 DM_PLY1,  DM_PLY2, DM_REC1, DM_REC2, KC_LOCK, DM_RSTP,
@@ -144,18 +144,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     KC_F9, KC_BSPC, KC_LALT, MO(_GPLUS), KC_SPC,             KC_ENT, LT(_NAV,KC_BSPC), KC_RALT, KC_RGUI, KC_BSLS),
 
 	[_NUM] = LAYOUT(
-    KC_PSCR,   KC_F1,   KC_2,    KC_F3,   KC_F4,    KC_F5,                              KC_F6,   KC_F7,   KC_F8,  KC_F9, KC_F10,  KC_F11,
+    KC_PSCR,   G(KC_1), G(KC_2), G(KC_3), G(KC_4),  G(KC_5),                            KC_F6,   KC_F7,   KC_F8,  KC_F9, KC_F10,  KC_F11,
     A(KC_TAB), M_ARROW, M_TMPL,  KC_RBRC, KC_RPRN,  KC_RCBR,                            KC_PAST, KC_7,    KC_8,   KC_9,  KC_PMNS, KC_F12,
     DM_RSTP,   M_SLCT,  KC_LT,   KC_LBRC, KC_LPRN,  KC_LCBR,                            KC_PDOT, KC_4,    KC_5,   KC_6,  KC_0,    KC_PPLS,
     DM_REC1,   DM_PLY1, A(KC_X), A(KC_C), A(KC_V), A(KC_B), M_CACX,         TG(_GAME),  KC_COMM, KC_1,    KC_2,   KC_3,  KC_PSLS, M_AF4,
-                      KC_LOCK, KC_LCTL, _______,  _______, _______,         _______,  C(KC_DEL), KC_PMNS, XXXXXXX, XXXXXXX),
+                      KC_LOCK, KC_LCTL, _______,  _______, _______,         _______,    XXXXXXX, KC_PMNS, XXXXXXX, XXXXXXX),
 
 	[_NAV] = LAYOUT(
     _______, _______, _______, _______, _______, _______,                               G(KC_1),    G(KC_2),    G(KC_3),    G(KC_4), G(KC_5), G(KC_6),
     _______, _______, KC_BTN1, KC_MS_U, KC_APP,  KC_WH_U,                               KC_DEL,     KC_HOME,    KC_END,     KC_INS,  KC_PGDN,  KC_PGUP,
     _______, KC_BTN2, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D,                               KC_LEFT,    KC_DOWN,    KC_UP,      KC_RGHT, KC_ENT,  C(KC_BSPC),
     _______, _______, _______, _______, _______, _______,   _______,           _______, M_DEC,      C(KC_LEFT), C(KC_RGHT), M_INC,   M_SLCT,  A(KC_TAB),
-                      _______, _______, KC_ACL0, C(KC_DEL), KC_ACL0,           _______, _______,    C(KC_DEL),  KC_RCTL,    _______),
+                      _______, _______, KC_ACL0, C(KC_DEL), KC_RSFT,           _______, _______,    C(KC_DEL),  KC_RCTL,    _______),
 
 	[_GPLUS] = LAYOUT(
     KTD_6,    KTD_7,   KTD_8,   KTD_9,   KTD_10,  KTD_11,                              _______, _______, _______, _______, _______, _______,
@@ -460,13 +460,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case M_LDR:
             if (record->event.pressed) {
             // when keycode is pressed
+            register_code16(KC_LGUI);
             register_code16(KC_LCTL);
-            register_code16(KC_LSFT);
             register_code16(KC_LALT);
+            register_code16(KC_LSFT);
         } else {
+            unregister_code16(KC_LGUI);
             unregister_code16(KC_LCTL);
-            unregister_code16(KC_LSFT);
             unregister_code16(KC_LALT);
+            unregister_code16(KC_LSFT);
             // when keycode is released
 
         }
