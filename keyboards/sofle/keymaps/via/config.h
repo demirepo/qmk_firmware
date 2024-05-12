@@ -66,6 +66,9 @@ for more options.
 #define BOOTMAGIC_KEY_EE_HANDS_LEFT KC_J
 #define BOOTMAGIC_KEY_EE_HANDS_RIGHT KC_L
 
+#define SPLIT_USB_DETECT
+#define EE_HANDS
+
 
 /* disable debug print */
 // #define NO_DEBUG
@@ -114,5 +117,3 @@ for more options.
 #endif
 
 #define _______ KC_TRNS
-
-
